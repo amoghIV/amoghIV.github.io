@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Pantheon Virtual Tour</title>
+  <style>
+    html,body{height:100%;margin:0;background:#0b0c10;overflow:hidden}
+    #c{position:fixed;inset:0}
+    .ui{position:fixed;left:12px;top:12px;z-index:10;display:flex;gap:8px;flex-wrap:wrap;
+        font:14px/1.2 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
+    .btn{background:rgba(20,20,30,.75);color:#fff;border:1px solid rgba(255,255,255,.25);
+         padding:8px 10px;border-radius:8px;cursor:pointer;backdrop-filter:blur(3px)}
+    .btn:hover{background:rgba(30,30,44,.9)}
+    .hint{color:#ddd;font-size:12px;padding:8px 10px;border-radius:8px;background:rgba(20,20,30,.45);
+          border:1px solid rgba(255,255,255,.2)}
+    .overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;
+             opacity:0;pointer-events:none;transition:.3s;z-index:20}
+    .overlay.show{opacity:1;pointer-events:auto}
+    .card{max-width:640px;width:calc(100% - 40px);background:#fff;color:#111;border-radius:12px;
+          box-shadow:0 30px 100px rgba(0,0,0,.6);padding:18px 20px;position:relative}
+    .card h2{margin:0 0 6px} .card p{margin:0 0 10px;line-height:1.5}
+    .close{position:absolute;right:10px;top:10px;border:none;background:#e33;color:#fff;border-radius:6px;padding:6px 10px;cursor:pointer}
+    .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:16px;background:rgba(24,24,30,.85);color:#fff;padding:8px 12px;border-radius:8px;font:12px/1.2 system-ui;z-index:30;opacity:0;transition:.3s}
+    .toast.show{opacity:1}
+    .status{position:fixed;right:12px;top:12px;background:rgba(255,230,0,.1);color:#ffd400;border:1px solid rgba(255,212,0,.4);
+            padding:6px 10px;border-radius:8px;font:12px/1.2 system-ui;z-index:15;display:none}
+    .status.err{background:rgba(255,60,60,.12);color:#ffb3b3;border-color:rgba(255,60,60,.35);display:block}
+    .status.ok{background:rgba(60,255,120,.12);color:#caffd2;border-color:rgba(60,255,120,.35);display:block}
+  </style>
+</head>
+<body>
+  <canvas id="c"></canvas>
+
+  <div class="ui">
+    <button id="free" class="btn">Enter Free Bird’s-Eye</button>
+    <button id="reset" class="btn">Reset View</button>
+    <button id="outside" class="btn">Outside</button>
+    <button id="inside" class="btn">Inside</button>
+    <span class="hint">Orbit: drag • Zoom: wheel • Pan: Shift+drag • Click glowing points • Free: W/A/S/D + Q/E</span>
+  </div>
+
+  <div id="overlay" class="overlay"><div class="card">
+    <button class="close" id="close">&times;</button>
+    <div id="info"></div>
+  </div></div>
+  <div id="toast" class="toast"></div>
+  <div id="status" class="status"></div>
+
+  <script type="module">
+    import * as THREE from 'https://unpkg.com/three@0.157.0/build/three.module.js';
+    import { OrbitControls } from 'https://unpkg.com/three@0.157.0/examples/jsm/controls/OrbitControls.js';
+    import { FlyControls } from 'https://unpkg.com/three@0.157.0/examples/jsm/controls/FlyControls.js';
+    import { GLTFLoader } from 'https://unpkg.com/three@0.157.0/examples/jsm/loaders/GLTFLoader.js';
+
+    const canvas = document.getElementById('c');
+    const overlay = document.getElementById('overlay');
+    const infoDiv = document.getElementById('info');
+    const closeBtn = document.getElementById('close');
+    const toast = document.getElementById('toast');
+    const status = document.getElementById('status');
+    const btnFree = document.getElementById('free');
+    const btnReset = document.getElementById('reset');
+    const btnOut  = document.getElementById('outside');
+    const btnIn   = document.getElementById('inside');
+
+    function showInfo(html){ infoDiv.innerHTML=html; overlay.classList.add('show'); }
+    function hideInfo(){ overlay.classList.remove('show'); }
+    function toastMsg(t,ms=2200){ toast.textContent=t; toast.classList.add('show'); setTimeout(()=>toast.classList.remove('show'), ms); }
+    function statusMsg(t, ok=false, err=false){
+      status.textContent = t;
+      status.className = 'status' + (ok?' ok':'') + (err?' err':'');
+      status.style.display = 'block';
+    }
+    closeBtn.onclick=hideInfo; overlay.onclick=(e)=>{ if(e.target===overlay) hideInfo(); };
+
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x0b0c10);
+    const renderer = new THREE.WebGLRenderer({canvas, antialias:true});
+    renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+    renderer.setSize(innerWidth, innerHeight);
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+    const camera = new THREE.PerspectiveCamera(60, innerWidth/innerHeight, 0.1, 2000);
+    camera.position.set(0, 12, -85);
+
+    const orbit = new OrbitControls(camera, renderer.domElement);
+    orbit.enableDamping=true; orbit.dampingFactor=0.08; orbit.minDistance=6; orbit.maxDistance=250; orbit.maxPolarAngle=Math.PI*0.495;
+    orbit.target.set(0,14,0);
+
+    const fly = new FlyControls(camera, renderer.domElement);
+    fly.movementSpeed=18; fly.rollSpeed=0.003; fly.dragToLook=true; let freeMode=false;
+
+    const hemi = new THREE.HemisphereLight(0xddddff, 0x101018, 0.65); scene.add(hemi);
+    const sun = new THREE.DirectionalLight(0xffffff, 1.2);
+    sun.position.set(80, 140, -50); sun.castShadow=true;
+    sun.shadow.mapSize.set(2048,2048);
+    sun.shadow.camera.near=0.5; sun.shadow.camera.far=800;
+    sun.shadow.camera.left=-200; sun.shadow.camera.right=200; sun.shadow.camera.top=200; sun.shadow.camera.bottom=-200;
+    scene.add(sun);
+
+    const ground = new THREE.Mesh(new THREE.PlaneGeometry(800,800), new THREE.MeshStandardMaterial({color:0x23252c,roughness:1}));
+    ground.rotation.x = -Math.PI/2; ground.position.y=-0.02; ground.receiveShadow=true; scene.add(ground);
+
+    const pantheon = new THREE.Group(); scene.add(pantheon);
+
+    // Try to load GLB; if not found -> build procedural fallback so it's never empty.
+    const tryUrls = ['pantheon.glb?v=1','assets/pantheon.glb?v=1'];
+    const loader = new GLTFLoader();
+
+    let loadedUrl = null;
+    for (const u of tryUrls){
+      try{
+        const gltf = await loader.loadAsync(u);
+        pantheon.add(gltf.scene);
+        gltf.scene.traverse(o=>{ if(o.isMesh){ o.castShadow=true; o.receiveShadow=true; if(o.material) o.material.side = THREE.DoubleSide; } });
+        statusMsg('Model loaded: ' + u.replace('?v=1',''), true, false);
+        loadedUrl = u;
+        break;
+      }catch(e){
+        console.warn('Failed to load', u, e);
+      }
+    }
+    if(!loadedUrl){
+      statusMsg('Could not find pantheon.glb — showing built‑in fallback (upload pantheon.glb next to index.html)', false, true);
+      buildProceduralPantheon(pantheon);
+      toastMsg('Fallback model active', 3000);
+    }
+
+    // Hotspots
+    const hotspots = [
+      { id:'facade',  p:new THREE.Vector3(0,14,-38),  cam:{pos:[0,10,-85], tgt:[0,12,0]}, html:`<h2>Exterior & Portico</h2><p>Monumental portico with Agrippa’s inscription. Present structure: Hadrian (c. 118–125 CE).</p>` },
+      { id:'entrance',p:new THREE.Vector3(0,6.5,-22), cam:{pos:[0,4,-6],  tgt:[0,6,6]},   html:`<h2>Entrance & Rotunda</h2><p>Beyond the bronze doors lies the circular nave. The floor drains rain from the oculus.</p>` },
+      { id:'dome',    p:new THREE.Vector3(0,2,0),     cam:{pos:[0,1.2,0.5],tgt:[0,16,0]},  html:`<h2>Dome & Oculus</h2><p>Diameter equals height (~43 m). Oculus ~9 m — only direct light source.</p>` },
+      { id:'raphael', p:new THREE.Vector3(-15,2.8,0), cam:{pos:[-6,2,0],   tgt:[-20,3,0]}, html:`<h2>Raphael’s Tomb</h2><p>Raphael (1483–1520) requested burial here; his tomb became a model for later interments.</p>` },
+      { id:'altar',   p:new THREE.Vector3(0,2.0,18),  cam:{pos:[0,1.6,10], tgt:[0,3,24]},  html:`<h2>High Altar</h2><p>Consecrated 609 CE as St. Mary and the Martyrs. Pentecost rose‑petal rite continues.</p>` },
+    ];
+    const raycaster = new THREE.Raycaster(); const mouse = new THREE.Vector2();
+    const markerMat = new THREE.MeshBasicMaterial({color:0xffc400});
+    const markers = new THREE.Group(); scene.add(markers);
+    hotspots.forEach(h=>{
+      const m = new THREE.Mesh(new THREE.SphereGeometry(0.7,16,12), markerMat);
+      m.position.copy(h.p); m.userData.id = h.id; markers.add(m);
+    });
+
+    renderer.domElement.addEventListener('click', (e)=>{
+      if(overlay.classList.contains('show')) return;
+      const r = renderer.domElement.getBoundingClientRect();
+      mouse.x = ((e.clientX - r.left)/r.width)*2 - 1;
+      mouse.y = -((e.clientY - r.top)/r.height)*2 + 1;
+      raycaster.setFromCamera(mouse, camera);
+      const hits = raycaster.intersectObjects(markers.children, false);
+      if(hits.length){
+        const id = hits[0].object.userData.id;
+        const h = hotspots.find(x=>x.id===id);
+        walkTo(h.cam.pos, h.cam.tgt, ()=>showInfo(h.html));
+      }
+    });
+
+    // Camera transitions & modes
+    let walking=false, t0=0, dur=1.5, fromPos=new THREE.Vector3(), toPos=new THREE.Vector3(), fromTgt=new THREE.Vector3(), toTgt=new THREE.Vector3();
+    function easeInOut(t){ return t<.5?2*t*t:-1+(4-2*t)*t; }
+    function walkTo(posArr, tgtArr, onArrive){
+      if(freeMode) toggleFree(false);
+      walking=true; t0=performance.now();
+      fromPos.copy(camera.position); fromTgt.copy(orbit.target);
+      toPos.set(posArr[0],posArr[1],posArr[2]); toTgt.set(tgtArr[0],tgtArr[1],tgtArr[2]);
+      arriveCb = onArrive || null;
+    }
+    let arriveCb=null;
+    function toggleFree(on){
+      freeMode=on;
+      if(on){ btnFree.textContent='Exit Free Bird’s-Eye'; orbit.enabled=false; }
+      else  { btnFree.textContent='Enter Free Bird’s-Eye'; orbit.enabled=true; }
+    }
+    btnFree.onclick=()=>toggleFree(!freeMode);
+    btnReset.onclick=()=>{ toggleFree(false); orbit.target.set(0,14,0); camera.position.set(0,12,-85); orbit.update(); };
+    btnOut.onclick = ()=>{ toggleFree(false); walkTo([0,10,-85],[0,12,0]); };
+    btnIn.onclick  = ()=>{ toggleFree(false); walkTo([0,4,-6],[0,6,6]); };
+
+    // Animate
+    let last=performance.now();
+    function render(now){
+      const dt = Math.min(0.05, (now-last)/1000); last=now;
+      if(walking){
+        const t=Math.min(1,(now-t0)/(dur*1000)), k=easeInOut(t);
+        camera.position.lerpVectors(fromPos,toPos,k);
+        orbit.target.lerpVectors(fromTgt,toTgt,k);
+        if(t>=1){ walking=false; if(arriveCb){ arriveCb(); arriveCb=null; } }
+      }
+      if(freeMode) fly.update(dt); else orbit.update();
+      sun.position.x = Math.cos(now*0.00012)*120; sun.position.z = Math.sin(now*0.00012)*-80;
+      renderer.render(scene,camera);
+      requestAnimationFrame(render);
+    }
+    requestAnimationFrame(render);
+
+    addEventListener('resize', ()=>{
+      camera.aspect = innerWidth/innerHeight; camera.updateProjectionMatrix();
+      renderer.setSize(innerWidth, innerHeight);
+    });
+
+    // --------- fallback procedural builder ---------
+    function buildProceduralPantheon(root){
+      const stone = new THREE.MeshStandardMaterial({ color: 0x9b978f, roughness: 0.85 });
+      const darker= new THREE.MeshStandardMaterial({ color: 0x6f6b64, roughness: 0.9 });
+      const rotundaR=22, rotundaH=22, domeR=22, oculusR=9/2;
+
+      const drum = new THREE.Mesh(new THREE.CylinderGeometry(rotundaR,rotundaR,rotundaH,64,1,true), stone);
+      drum.position.y = rotundaH/2; drum.castShadow=true; drum.receiveShadow=true; root.add(drum);
+
+      const thetaStart = Math.asin(oculusR/domeR);
+      const dome = new THREE.Mesh(new THREE.SphereGeometry(domeR,96,64,0,Math.PI*2,thetaStart,Math.PI/2 - thetaStart), stone);
+      dome.position.y = rotundaH; dome.castShadow=true; dome.receiveShadow=true; root.add(dome);
+
+      const ring = new THREE.Mesh(new THREE.RingGeometry(oculusR*0.98, oculusR*1.06, 64), new THREE.MeshBasicMaterial({color:0xf6e6a8, side:THREE.DoubleSide}));
+      ring.rotation.x = Math.PI/2; ring.position.set(0, rotundaH + Math.sqrt(domeR*domeR - oculusR*oculusR), 0); root.add(ring);
+
+      const porticoDepth=12, porticoW=40;
+      const roof = new THREE.Mesh(new THREE.BoxGeometry(porticoW,1.2,porticoDepth), darker);
+      roof.position.set(0, rotundaH*0.5+4, -(rotundaR + porticoDepth/2 - 2));
+      roof.castShadow=true; roof.receiveShadow=true; root.add(roof);
+
+      const ped = new THREE.Mesh(new THREE.ConeGeometry(porticoW/2,8,3), stone);
+      ped.rotation.z = Math.PI; ped.rotation.y = Math.PI/2;
+      ped.position.set(0, roof.position.y+4.5, roof.position.z);
+      ped.castShadow=true; ped.receiveShadow=true; root.add(ped);
+
+      for(let i=0;i<3;i++){
+        const step = new THREE.Mesh(new THREE.BoxGeometry(porticoW+6-i*2,0.8,porticoDepth+10+i*2), new THREE.MeshStandardMaterial({color:0x4a4a4d,roughness:1}));
+        step.position.set(0,0.4+i*0.8, -(rotundaR + porticoDepth/2 + 6 + i*2));
+        step.receiveShadow=true; root.add(step);
+      }
+
+      const door = new THREE.Mesh(new THREE.BoxGeometry(7,12,1.2), new THREE.MeshStandardMaterial({color:0x222, roughness:0.95}));
+      door.position.set(0,6,-(rotundaR-0.6));
+      door.castShadow=true; door.receiveShadow=true; root.add(door);
+
+      function columnRow(zOff){
+        const cols=8, span=porticoW*0.82;
+        for(let i=0;i<cols;i++){
+          const x = -span/2 + i*(span/(cols-1));
+          const col = new THREE.Mesh(new THREE.CylinderGeometry(1.15,1.15,14,32), stone);
+          col.position.set(x,7, -(rotundaR + zOff)); col.castShadow=true; col.receiveShadow=true; root.add(col);
+          const base = new THREE.Mesh(new THREE.CylinderGeometry(1.4,1.4,0.6,32), darker);
+          base.position.set(x,0.3, -(rotundaR + zOff)); base.receiveShadow=true; root.add(base);
+          const cap  = new THREE.Mesh(new THREE.CylinderGeometry(1.4,1.4,0.6,32), darker);
+          cap.position.set(x,13.7, -(rotundaR + zOff)); cap.castShadow=true; cap.receiveShadow=true; root.add(cap);
+        }
+      }
+      columnRow(porticoDepth - 1.5);
+      columnRow(porticoDepth - 1.5 - 5.2);
+
+      const altar = new THREE.Mesh(new THREE.BoxGeometry(6,4,2), new THREE.MeshStandardMaterial({color:0x8c877e, roughness:.85}));
+      altar.position.set(0,2, rotundaR - 3);
+      altar.castShadow=true; altar.receiveShadow=true; root.add(altar);
+
+      for(let i=0;i<7;i++){
+        const ang=(i-3)*Math.PI/8, r=rotundaR-1.2;
+        const x=Math.sin(ang)*r, z=Math.cos(ang)*r;
+        const box=new THREE.Mesh(new THREE.BoxGeometry(4,6,1), darker);
+        box.position.set(x,4,z); box.lookAt(0,4,0); box.castShadow=true; box.receiveShadow=true; root.add(box);
+      }
+    }
+  </script>
+</body>
+</html>
