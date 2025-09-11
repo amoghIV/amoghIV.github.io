@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Pantheon Virtual Tour</title>
+  <style>
+    html,body{height:100%;margin:0;background:#0b0c10;overflow:hidden}
+    #c{position:fixed;inset:0}
+    .ui{position:fixed;left:12px;top:12px;z-index:10;display:flex;gap:8px;flex-wrap:wrap;
+        font:14px/1.2 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
+    .btn{background:rgba(20,20,30,.75);color:#fff;border:1px solid rgba(255,255,255,.25);
+         padding:8px 10px;border-radius:8px;cursor:pointer;backdrop-filter:blur(3px)}
+    .btn:hover{background:rgba(30,30,44,.9)}
+    .hint{color:#ddd;font-size:12px;padding:8px 10px;border-radius:8px;background:rgba(20,20,30,.45);
+          border:1px solid rgba(255,255,255,.2)}
+    .overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;
+             opacity:0;pointer-events:none;transition:.3s;z-index:20}
+    .overlay.show{opacity:1;pointer-events:auto}
+    .card{max-width:640px;width:calc(100% - 40px);background:#fff;color:#111;border-radius:12px;
+          box-shadow:0 30px 100px rgba(0,0,0,.6);padding:18px 20px;position:relative}
+    .card h2{margin:0 0 6px} .card p{margin:0 0 10px;line-height:1.5}
+    .close{position:absolute;right:10px;top:10px;border:none;background:#e33;color:#fff;border-radius:6px;padding:6px 10px;cursor:pointer}
+    .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:16px;background:rgba(24,24,30,.85);color:#fff;padding:8px 12px;border-radius:8px;font:12px/1.2 system-ui;z-index:30;opacity:0;transition:.3s}
+    .toast.show{opacity:1}
+  </style>
+</head>
+<body>
+  <canvas id="c"></canvas>
+
+  <div class="ui">
+    <button id="free" class="btn">Enter Free Bird’s-Eye</button>
+    <button id="reset" class="btn">Reset View</button>
+    <button id="outside" class="btn">Outside</button>
+    <button id="inside" class="btn">Inside</button>
+    <span class="hint">Orbit: drag • Zoom: wheel • Pan: Shift+drag • Click glowing points • Free mode: W/A/S/D + Q/E</span>
+  </div>
+
+  <div id="overlay" class="overlay"><div class="card">
+    <button class="close" id="close">&times;</button>
+    <div id="info"></div>
+  </div></div>
+  <div id="toast" class="toast"></div>
+
+  <script type="module">
+    import * as THREE from 'https://unpkg.com/three@0.157.0/build/three.module.js';
+    import { OrbitControls } from 'https://unpkg.com/three@0.157.0/examples/jsm/controls/OrbitControls.js';
+    import { FlyControls } from 'https://unpkg.com/three@0.157.0/examples/jsm/controls/FlyControls.js';
+    import { GLTFLoader } from 'https://unpkg.com/three@0.157.0/examples/jsm/loaders/GLTFLoader.js';
+
+    const canvas = document.getElementById('c');
+    const overlay = document.getElementById('overlay');
+    const infoDiv = document.getElementById('info');
+    const closeBtn = document.getElementById('close');
+    const toast = document.getElementById('toast');
+    const btnFree = document.getElementById('free');
+    const btnReset = document.getElementById('reset');
+    const btnOut  = document.getElementById('outside');
+    const btnIn   = document.getElementById('inside');
+
+    function showInfo(html){ infoDiv.innerHTML=html; overlay.classList.add('show'); }
+    function hideInfo(){ overlay.classList.remove('show'); }
+    function toastMsg(t,ms=2200){ toast.textContent=t; toast.classList.add('show'); setTimeout(()=>toast.classList.remove('show'), ms); }
+    closeBtn.onclick=hideInfo; overlay.onclick=(e)=>{ if(e.target===overlay) hideInfo(); };
+
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x0b0c10);
+    const renderer = new THREE.WebGLRenderer({canvas, antialias:true});
+    renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+    renderer.setSize(innerWidth, innerHeight);
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+    const camera = new THREE.PerspectiveCamera(60, innerWidth/innerHeight, 0.1, 2000);
+    camera.position.set(0, 12, -85);
+
+    const orbit = new OrbitControls(camera, renderer.domElement);
+    orbit.enableDamping=true; orbit.dampingFactor=0.08; orbit.minDistance=6; orbit.maxDistance=250; orbit.maxPolarAngle=Math.PI*0.495;
+    orbit.target.set(0,14,0);
+
+    const fly = new FlyControls(camera, renderer.domElement);
+    fly.movementSpeed=18; fly.rollSpeed=0.003; fly.dragToLook=true; let freeMode=false;
+
+    const hemi = new THREE.HemisphereLight(0xddddff, 0x101018, 0.6); scene.add(hemi);
+    const sun = new THREE.DirectionalLight(0xffffff, 1.1);
+    sun.position.set(60, 120, -40); sun.castShadow=true;
+    sun.shadow.mapSize.set(2048,2048);
+    sun.shadow.camera.near=0.5; sun.shadow.camera.far=600;
+    sun.shadow.camera.left=-180; sun.shadow.camera.right=180; sun.shadow.camera.top=180; sun.shadow.camera.bottom=-180;
+    scene.add(sun);
+
+    const ground = new THREE.Mesh(new THREE.PlaneGeometry(800,800), new THREE.MeshStandardMaterial({color:0x1a1c22,roughness:1}));
+    ground.rotation.x = -Math.PI/2; ground.position.y=-0.02; ground.receiveShadow=true; scene.add(ground);
+
+    const pantheon = new THREE.Group(); scene.add(pantheon);
+    // Load the local GLB -> 'pantheon.glb' in the same folder
+    try{
+      const gltf = await new GLTFLoader().loadAsync('pantheon.glb');
+      pantheon.add(gltf.scene);
+      gltf.scene.traverse(o=>{ if(o.isMesh){ o.castShadow=true; o.receiveShadow=true; if(o.material) o.material.side = THREE.DoubleSide; } });
+      toastMsg('Model loaded ✓');
+    }catch(e){
+      console.error(e);
+      toastMsg('Could not load pantheon.glb', 4000);
+    }
+
+    // Hotspots
+    const hotspots = [
+      { id:'facade',  p:new THREE.Vector3(0,14,-38),  cam:{pos:[0,10,-85], tgt:[0,12,0]}, html:`<h2>Exterior & Portico</h2><p>The monumental portico frames the entrance and bears the ancient inscription of Agrippa. The present structure dates to Hadrian’s rebuilding (c. 118–125 CE).</p>` },
+      { id:'entrance',p:new THREE.Vector3(0,6.5,-22), cam:{pos:[0,4,-6],  tgt:[0,6,6]},   html:`<h2>Entrance & Rotunda</h2><p>Beyond the bronze doors lies the circular nave. The floor’s subtle slope and drains handle rain from the oculus.</p>` },
+      { id:'dome',    p:new THREE.Vector3(0,2,0),     cam:{pos:[0,1.2,0.5],tgt:[0,16,0]},  html:`<h2>Dome & Oculus</h2><p>Diameter and height match (~43 m). The oculus (~9 m) is the only direct light source.</p>` },
+      { id:'raphael', p:new THREE.Vector3(-15,2.8,0), cam:{pos:[-6,2,0],   tgt:[-20,3,0]}, html:`<h2>Raphael’s Tomb</h2><p>Raphael (1483–1520) requested burial here; his tomb set a precedent for later interments.</p>` },
+      { id:'altar',   p:new THREE.Vector3(0,2.0,18),  cam:{pos:[0,1.6,10], tgt:[0,3,24]},  html:`<h2>High Altar</h2><p>Since 609 CE the Pantheon has been a church. On Pentecost, rose petals are dropped through the oculus.</p>` },
+    ];
+    const raycaster = new THREE.Raycaster(); const mouse = new THREE.Vector2();
+    const markerMat = new THREE.MeshBasicMaterial({color:0xffc400});
+    const markers = new THREE.Group(); scene.add(markers);
+    hotspots.forEach(h=>{
+      const m = new THREE.Mesh(new THREE.SphereGeometry(0.7,16,12), markerMat);
+      m.position.copy(h.p); m.userData.id = h.id; markers.add(m);
+    });
+
+    renderer.domElement.addEventListener('click', (e)=>{
+      if(overlay.classList.contains('show')) return;
+      const r = renderer.domElement.getBoundingClientRect();
+      mouse.x = ((e.clientX - r.left)/r.width)*2 - 1;
+      mouse.y = -((e.clientY - r.top)/r.height)*2 + 1;
+      raycaster.setFromCamera(mouse, camera);
+      const hits = raycaster.intersectObjects(markers.children, false);
+      if(hits.length){
+        const id = hits[0].object.userData.id;
+        const h = hotspots.find(x=>x.id===id);
+        walkTo(h.cam.pos, h.cam.tgt, ()=>showInfo(h.html));
+      }
+    });
+
+    // Camera transitions & modes
+    let walking=false, t0=0, dur=1.5, fromPos=new THREE.Vector3(), toPos=new THREE.Vector3(), fromTgt=new THREE.Vector3(), toTgt=new THREE.Vector3();
+    function easeInOut(t){ return t<.5?2*t*t:-1+(4-2*t)*t; }
+    function walkTo(posArr, tgtArr, onArrive){
+      if(freeMode) toggleFree(false);
+      walking=true; t0=performance.now();
+      fromPos.copy(camera.position); fromTgt.copy(orbit.target);
+      toPos.set(posArr[0],posArr[1],posArr[2]); toTgt.set(tgtArr[0],tgtArr[1],tgtArr[2]);
+      arriveCb = onArrive || null;
+    }
+    let arriveCb=null;
+    function toggleFree(on){
+      freeMode=on;
+      if(on){ btnFree.textContent='Exit Free Bird’s-Eye'; orbit.enabled=false; }
+      else  { btnFree.textContent='Enter Free Bird’s-Eye'; orbit.enabled=true; }
+    }
+    btnFree.onclick=()=>toggleFree(!freeMode);
+    btnReset.onclick=()=>{ toggleFree(false); orbit.target.set(0,14,0); camera.position.set(0,12,-85); orbit.update(); };
+    btnOut.onclick = ()=>{ toggleFree(false); walkTo([0,10,-85],[0,12,0]); };
+    btnIn.onclick  = ()=>{ toggleFree(false); walkTo([0,4,-6],[0,6,6]); };
+
+    // Animate
+    let last=performance.now();
+    function render(now){
+      const dt = Math.min(0.05, (now-last)/1000); last=now;
+      if(walking){
+        const t=Math.min(1,(now-t0)/(dur*1000)), k=easeInOut(t);
+        camera.position.lerpVectors(fromPos,toPos,k);
+        orbit.target.lerpVectors(fromTgt,toTgt,k);
+        if(t>=1){ walking=false; if(arriveCb){ arriveCb(); arriveCb=null; } }
+      }
+      if(freeMode) fly.update(dt); else orbit.update();
+      // soft sun animation
+      sun.position.x = Math.cos(now*0.00012)*120; sun.position.z = Math.sin(now*0.00012)*-80;
+      renderer.render(scene,camera);
+      requestAnimationFrame(render);
+    }
+    requestAnimationFrame(render);
+
+    addEventListener('resize', ()=>{
+      camera.aspect = innerWidth/innerHeight; camera.updateProjectionMatrix();
+      renderer.setSize(innerWidth, innerHeight);
+    });
+  </script>
+</body>
+</html>
