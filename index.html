@@ -1,147 +1,86 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Pantheon • Immersive Tour</title>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Pantheon • Super In-Depth Tour (AP)</title>
 
-<!-- Performance -->
+<!-- Performance & fonts -->
 <link rel="preconnect" href="https://upload.wikimedia.org" crossorigin>
 <link rel="preconnect" href="https://commons.wikimedia.org" crossorigin>
-
-<!-- Fonts -->
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Great+Vibes&display=swap" rel="stylesheet">
 
 <style>
   :root{
-    --bg:#0b0c0f;
-    --fg:#f2efe9;
-    --muted:#cfc9bb;
-    --accent:#e15b5b;
-    --accent-2:#a33d3d;
-    --panel:#15161c;
-    --panel-alpha: rgba(20,21,27,.78);
-    --border: rgba(255,255,255,.1);
-    --shadow: 0 12px 40px rgba(0,0,0,.45);
-    --radius:16px;
-    --maxw:1120px;
-    --panelw: min(520px, 92vw);
+    --bg:#0a0b0e; --fg:#f4efe6; --muted:#cfc7b6;
+    --accent:#e15b5b; --accent2:#a63a3a;
+    --panel:rgba(18,19,25,.83); --border:rgba(255,255,255,.12);
+    --shadow:0 14px 48px rgba(0,0,0,.5);
+    --radius:18px; --panelw:min(560px,94vw); --maxw:1160px;
   }
   *{box-sizing:border-box}
   html,body{height:100%}
-  body{
-    margin:0;background:var(--bg);color:var(--fg);
-    font-family: "Cinzel", serif; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
-    overflow:hidden;
-  }
+  body{margin:0;background:var(--bg);color:var(--fg);font-family:"Cinzel",serif;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;overflow:hidden}
 
-  /* HOME */
-  #home{
-    position:fixed; inset:0; display:grid; place-items:center;
-    background:#000 url("https://commons.wikimedia.org/wiki/Special:FilePath/Pantheon%20and%20fountain%20at%20night.JPG?width=1920") center/cover no-repeat;
-  }
-  .home-overlay{position:absolute; inset:0; background:linear-gradient(180deg,rgba(0,0,0,.35),rgba(0,0,0,.65))}
-  .home-card{
-    position:relative; z-index:2; max-width:var(--maxw);
-    background:var(--panel-alpha); border:1px solid var(--border);
-    border-radius:var(--radius); padding:24px; box-shadow:var(--shadow);
-    text-align:center;
-  }
-  .home-title{font-size:clamp(28px,4vw,56px); letter-spacing:.6px; margin:0 0 6px}
-  .home-sub{opacity:.9; margin:0 0 18px}
-  .mla{
-    margin:16px auto 22px; display:inline-block; text-align:left; line-height:1.6;
-    padding:12px 16px; background:rgba(255,255,255,.04); border-radius:10px; border:1px solid var(--border)
-  }
-  .home-btn{
-    appearance:none; border:none; cursor:pointer;
-    background:linear-gradient(180deg,var(--accent),var(--accent-2));
-    color:#fff; padding:14px 22px; border-radius:12px; font-size:18px; font-weight:700;
-    box-shadow:0 10px 30px rgba(225,91,91,.25);
-    transition:transform .2s ease, box-shadow .2s ease, filter .2s ease;
-  }
-  .home-btn:hover{transform:translateY(-2px); filter:saturate(1.05); box-shadow:0 14px 32px rgba(225,91,91,.35)}
-  .hint{margin-top:10px; font-size:14px; color:var(--muted); opacity:.9}
+  /* Home */
+  #home{position:fixed;inset:0;display:grid;place-items:center;background:#000 url("https://commons.wikimedia.org/wiki/Special:FilePath/Pantheon_and_fountain_at_night.JPG?width=2560") center/cover no-repeat}
+  .home-overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.35),rgba(0,0,0,.7))}
+  .home-card{position:relative;z-index:2;max-width:var(--maxw);background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);padding:22px 22px 18px;text-align:center}
+  .home-title{font-size:clamp(28px,4vw,56px);margin:0 0 6px}
+  .home-sub{opacity:.95;margin:0 0 16px}
+  .mla{display:inline-block;text-align:left;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:12px;padding:12px 16px;line-height:1.65}
+  .home-btn{appearance:none;border:none;border-radius:12px;background:linear-gradient(180deg,var(--accent),var(--accent2));color:#fff;padding:14px 22px;font-weight:700;font-size:18px;cursor:pointer;box-shadow:0 12px 36px rgba(225,91,91,.32);transition:transform .2s ease,box-shadow .2s ease,filter .2s ease}
+  .home-btn:hover{transform:translateY(-2px);filter:saturate(1.08)}
+  .hint{margin-top:10px;font-size:14px;color:var(--muted);opacity:.9}
 
-  /* APP */
-  #app{position:fixed; inset:0; display:none; background:#000}
-
-  .slide{
-    position:absolute; inset:0; display:grid; grid-template-columns:1fr; grid-template-rows:1fr;
-    background:#000 center/cover no-repeat;
-    opacity:0; pointer-events:none;
-    transition:opacity .6s ease;
-    image-rendering:auto;
-  }
-  .slide.active{opacity:1; pointer-events:auto}
-  .slide.fadeout{opacity:0}
-
-  /* Panel placed to one side so the photo is visible */
-  .panel{
-    position:absolute; top:6%; bottom:6%;
-    width:var(--panelw); padding:18px 18px 14px;
-    background:var(--panel-alpha); border:1px solid var(--border); border-radius:16px;
-    box-shadow: var(--shadow); overflow:auto;
-  }
-  .left{left:2.5%}
-  .right{right:2.5%}
-
-  /* Video slide background */
-  .vid-wrap{position:absolute; inset:0; overflow:hidden}
-  .vid-wrap video{position:absolute; min-width:100%; min-height:100%; top:50%; left:50%; transform:translate(-50%,-50%); object-fit:cover; filter:contrast(1.08) saturate(1.05)}
-  .vid-scrim{position:absolute; inset:0; background:radial-gradient(1100px 600px at 70% 60%,rgba(0,0,0,.1),rgba(0,0,0,.65) 60%, rgba(0,0,0,.9))}
-
-  .title{font-size:clamp(22px,3vw,32px); margin:0 0 8px; color:#f0e6d2}
-  .para{margin:6px 2px 8px; line-height:1.65; font-size:clamp(15px,1.4vw,18px)}
-  .bullets{margin:8px 6px 4px 18px; padding:0}
-  .bullets li{margin:8px 0; line-height:1.55; font-size:clamp(14px,1.3vw,17px)}
-
-  .progress{
-    position:fixed; top:10px; left:50%; transform:translateX(-50%);
-    z-index:10; background:rgba(0,0,0,.45); padding:6px 12px; border-radius:999px; font-size:14px; border:1px solid var(--border)
-  }
-  .navbtn{
-    position:fixed; top:50%; transform:translateY(-50%); z-index:8;
-    width:46px; height:46px; border-radius:50%; border:1px solid rgba(255,255,255,.18);
-    display:grid; place-items:center; background:rgba(0,0,0,.35); color:#fff; cursor:pointer;
-    transition:transform .15s ease, background .2s ease; user-select:none;
-  }
-  .navbtn:hover{transform:translateY(-50%) scale(1.04); background:rgba(0,0,0,.45)}
+  /* App shell */
+  #app{position:fixed;inset:0;display:none;background:#000}
+  .progress{position:fixed;top:10px;left:50%;transform:translateX(-50%);z-index:10;background:rgba(0,0,0,.45);border:1px solid var(--border);padding:6px 12px;border-radius:999px;font-size:14px}
+  .navbtn{position:fixed;top:50%;transform:translateY(-50%);z-index:8;width:46px;height:46px;border-radius:50%;border:1px solid rgba(255,255,255,.16);display:grid;place-items:center;background:rgba(0,0,0,.36);color:#fff;cursor:pointer;transition:transform .15s ease, background .2s ease;user-select:none}
+  .navbtn:hover{transform:translateY(-50%) scale(1.04);background:rgba(0,0,0,.48)}
   #prev{left:14px} #next{right:14px}
-  @media (max-width:780px){ .navbtn{display:none} }
+  @media (max-width:780px){.navbtn{display:none}}
+
+  /* Slides */
+  .slide{position:absolute;inset:0;display:grid;background:#000 center/cover no-repeat;opacity:0;pointer-events:none;transition:opacity .45s ease}
+  .slide.active{opacity:1;pointer-events:auto}
+  .slideBG{position:absolute;inset:0;background-size:cover;background-position:center}
+  .panel{position:absolute;top:6%;bottom:6%;width:var(--panelw);background:var(--panel);border:1px solid var(--border);border-radius:16px;box-shadow:var(--shadow);overflow:auto;padding:18px}
+  .left{left:2.5%} .right{right:2.5%}
+  .title{font-size:clamp(22px,3vw,32px);margin:0 0 8px;color:#f1e7d3}
+  .para{margin:6px 2px 8px;line-height:1.7;font-size:clamp(15px,1.4vw,18px)}
+  .bullets{margin:8px 6px 4px 18px;padding:0}
+  .bullets li{margin:8px 0;line-height:1.55;font-size:clamp(14px,1.3vw,17px)}
+
+  /* Video bg (HTML5) */
+  .vid-wrap{position:absolute;inset:0;overflow:hidden}
+  .vid-wrap video{position:absolute;min-width:100%;min-height:100%;top:50%;left:50%;transform:translate(-50%,-50%);object-fit:cover;filter:contrast(1.08) saturate(1.05)}
+  .vid-scrim{position:absolute;inset:0;background:radial-gradient(1200px 680px at 70% 60%,rgba(0,0,0,.08),rgba(0,0,0,.62) 60%, rgba(0,0,0,.9))}
+
+  /* Video bg (YouTube embed) */
+  .yt-wrap{position:absolute;inset:0;overflow:hidden}
+  .yt-wrap iframe{position:absolute;top:50%;left:50%;width:120vw;height:120vh;transform:translate(-50%,-50%)}
+  .yt-scrim{position:absolute;inset:0;background:radial-gradient(1200px 680px at 70% 60%,rgba(0,0,0,.08),rgba(0,0,0,.62) 60%, rgba(0,0,0,.9))}
 
   /* Controls */
-  .audio{
-    position:fixed; left:12px; bottom:12px; z-index:12;
-    background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.12);
-    color:#fff; padding:8px 12px; border-radius:10px; cursor:pointer;
-  }
-  .sources{
-    position:fixed; right:12px; bottom:12px; z-index:12;
-    border:none; background:transparent; cursor:pointer;
-    font-family:"Great Vibes", cursive; font-size:28px; color:#ffb3b3; text-shadow:0 2px 8px rgba(0,0,0,.7);
-  }
+  .controlbar{position:fixed;left:12px;bottom:12px;z-index:12;display:flex;gap:8px;flex-wrap:wrap}
+  .chip{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);color:#fff;padding:8px 12px;border-radius:10px;cursor:pointer}
+  .sources{position:fixed;right:12px;bottom:12px;z-index:12;border:none;background:transparent;cursor:pointer;font-family:"Great Vibes",cursive;font-size:28px;color:#ffb3b3;text-shadow:0 2px 8px rgba(0,0,0,.7)}
 
   /* Sources overlay */
-  #sourcesPane{
-    position:fixed; inset:0; display:none; z-index:30; background:rgba(0,0,0,.88);
-  }
-  .sources-wrap{
-    max-width:min(1000px,92vw); margin:6vh auto; background:var(--panel);
-    border:1px solid var(--border); border-radius:18px; padding:22px 22px 10px;
-    box-shadow:var(--shadow); height:88vh; overflow:auto;
-  }
-  .sources-wrap h2{
-    text-align:center; margin:4px 0 14px; color:#ffbebe; font-weight:700;
-  }
-  .sources-wrap ul{list-style:none; padding:0; margin:0}
-  .sources-wrap li{margin:10px 0 16px; line-height:1.5}
-  .closeX{
-    position:sticky; top:6px; float:right; margin-right:-8px;
-    font-size:22px; background:none; color:#ffbebe; border:none; cursor:pointer;
-  }
-  .sources-wrap a{color:#9ec5ff; text-decoration:none}
-  .sources-wrap a:hover{text-decoration:underline}
+  #sourcesPane{position:fixed;inset:0;display:none;z-index:30;background:rgba(0,0,0,.88)}
+  .sources-wrap{max-width:min(1000px,92vw);margin:6vh auto;background:rgba(18,19,25,.96);border:1px solid var(--border);border-radius:18px;padding:22px 22px 10px;box-shadow:var(--shadow);height:88vh;overflow:auto}
+  .sources-wrap h2{text-align:center;margin:4px 0 14px;color:#ffbebe}
+  .sources-wrap ul{list-style:none;padding:0;margin:0}
+  .sources-wrap li{margin:10px 0 16px;line-height:1.5}
+  .closeX{position:sticky;top:6px;float:right;margin-right:-8px;font-size:22px;background:none;color:#ffbebe;border:none;cursor:pointer}
+  .sources-wrap a{color:#9ec5ff;text-decoration:none} .sources-wrap a:hover{text-decoration:underline}
+
+  /* Directional slide transitions */
+  .slide.enter-right{animation:enterRight .55s both ease-out}
+  .slide.enter-left{animation:enterLeft .55s both ease-out}
+  @keyframes enterRight{from{opacity:0;transform:translateX(22px)}to{opacity:1;transform:translateX(0)}}
+  @keyframes enterLeft{from{opacity:0;transform:translateX(-22px)}to{opacity:1;transform:translateX(0)}}
 </style>
 </head>
 <body>
@@ -151,339 +90,363 @@
   <div class="home-overlay" aria-hidden="true"></div>
   <div class="home-card">
     <h1 class="home-title">The Roman Pantheon</h1>
-    <p class="home-sub">An immersive, AP-level guided tour</p>
-    <!-- MLA header -->
+    <p class="home-sub">A scholarly, immersive tour for AP World History</p>
     <div class="mla">
-      Amogh Bhat<br/>
-      Mr. Loggins<br/>
-      Period 3<br/>
+      Amogh Bhat<br>
+      Mr. Loggins<br>
+      Period 3<br>
       17 October 2025
-    </div><br/>
+    </div>
+    <br><br>
     <button id="begin" class="home-btn">Begin Tour of Pantheon</button>
-    <div class="hint">Press <strong>Space</strong> to advance • <strong>Backspace</strong> to go back</div>
+    <div class="hint">Press <strong>Space</strong> to advance • <strong>Backspace</strong> to go back • Auto-play available</div>
   </div>
 </section>
 
 <!-- APP -->
 <main id="app" aria-live="polite">
-  <div class="progress" id="progress">1 / 14</div>
-  <button id="prev" class="navbtn" aria-label="Previous slide">⟵</button>
-  <button id="next" class="navbtn" aria-label="Next slide">⟶</button>
+  <div class="progress" id="progress">1 / 17</div>
+  <button id="prev" class="navbtn" aria-label="Previous">⟵</button>
+  <button id="next" class="navbtn" aria-label="Next">⟶</button>
 </main>
 
 <!-- Controls -->
-<button class="audio" id="audioToggle" aria-label="Pause or play background music">⏸︎ Music</button>
+<div class="controlbar">
+  <button class="chip" id="audioToggle" aria-label="Pause or play background music">⏸︎ Music</button>
+  <button class="chip" id="autoToggle" aria-label="Pause or resume tour auto-advance">⏸︎ Auto</button>
+</div>
 <button class="sources" id="sourcesBtn" aria-label="Open sources used">Sources Used</button>
 
-<!-- Background music (public-domain, instrumental) -->
+<!-- Background music (instrumental, marching band; no vocals) -->
 <audio id="bgm" preload="auto" loop>
   <source src="https://commons.wikimedia.org/wiki/Special:FilePath/The%20Washington%20Post%20-%20Ceremonial%20Brass%20-%20United%20States%20Air%20Force%20Band.mp3" type="audio/mpeg">
   <source src="https://commons.wikimedia.org/wiki/Special:FilePath/The%20Washington%20Post%20-%20Ceremonial%20Brass%20-%20United%20States%20Air%20Force%20Band.ogg" type="audio/ogg">
 </audio>
 
-<!-- Sources pane -->
+<!-- Sources pane (MLA) -->
 <aside id="sourcesPane" role="dialog" aria-modal="true" aria-labelledby="srcTitle">
   <div class="sources-wrap">
     <button class="closeX" id="closeSources" title="Close">✕</button>
     <h2 id="srcTitle">Sources Used — MLA</h2>
     <ul>
       <!-- Core references -->
-      <li>The Editors of <em>Encyclopaedia Britannica</em>. “Pantheon.” <em>Britannica</em>, 29 July 2025. <a href="https://www.britannica.com/topic/Pantheon-building-Rome-Italy">https://www.britannica.com/topic/Pantheon-building-Rome-Italy</a>.</li>
-      <li>Harris, Beth, and Steven Zucker. “The Pantheon (Rome).” <em>Smarthistory</em>. <a href="https://smarthistory.org/the-pantheon/">https://smarthistory.org/the-pantheon/</a>.</li>
-      <li>Pantheon Roma. “History of the Pantheon in Rome and Curiosities to Discover.” <em>PantheonRoma.com</em>. <a href="https://www.pantheonroma.com/pantheon-history/">https://www.pantheonroma.com/pantheon-history/</a>.</li>
-      <li>Rome Tourism Board. “The Pantheon.” <em>Turismo Roma</em>. <a href="https://www.turismoroma.it/en/places/pantheon">https://www.turismoroma.it/en/places/pantheon</a>.</li>
-      <li>Hannah, Robert, and Giulio Magli. “The Role of the Sun in the Pantheon’s Design and Meaning.” <em>Numen</em> 58.4 (2011): 486–513. Preprint, arXiv, 2009. <a href="https://arxiv.org/abs/0910.0128">https://arxiv.org/abs/0910.0128</a>.</li>
-      <li>“Pantheon, Rome.” <em>Wikipedia</em>, 2025. <a href="https://en.wikipedia.org/wiki/Pantheon,_Rome">https://en.wikipedia.org/wiki/Pantheon,_Rome</a>.</li>
-      <li>ArcheoRoma. “Pantheon, Rome: History and Description.” <em>ArcheoRoma</em>. <a href="https://www.archeoroma.org/sites/pantheon/">https://www.archeoroma.org/sites/pantheon/</a>.</li>
+      <li>“Pantheon.” <em>Encyclopaedia Britannica</em>, 29 July 2025, <a href="https://www.britannica.com/topic/Pantheon-building-Rome-Italy">www.britannica.com/topic/Pantheon-building-Rome-Italy</a>. Accessed 13 Sept. 2025.</li>
+      <li>Harris, Beth, and Steven Zucker. “The Pantheon (Rome).” <em>Smarthistory</em>, <a href="https://smarthistory.org/the-pantheon/">smarthistory.org/the-pantheon/</a>. Accessed 13 Sept. 2025.</li>
+      <li>Hannah, Robert, and Giulio Magli. “The Role of the Sun in the Pantheon’s Design and Meaning.” <em>Numen</em>, vol. 58, no. 4, 2011, pp. 486–513. Preprint: arXiv, 2009, <a href="https://arxiv.org/abs/0910.0128">arxiv.org/abs/0910.0128</a>. Accessed 13 Sept. 2025.</li>
+      <li>“The Oculus of the Pantheon.” <em>PantheonRoma.com</em>, 24 Apr. 2025, <a href="https://www.pantheonroma.com/2025/04/24/the-oculus-of-the-pantheon/">pantheonroma.com/2025/04/24/the-oculus-of-the-pantheon/</a>. Accessed 13 Sept. 2025.</li>
+      <li>“The Pantheon.” <em>Turismo Roma</em>, <a href="https://www.turismoroma.it/en/places/pantheon">www.turismoroma.it/en/places/pantheon</a>. Accessed 13 Sept. 2025.</li>
+      <li>“Pantheon, Rome.” <em>Wikipedia</em>, 2025, <a href="https://en.wikipedia.org/wiki/Pantheon,_Rome">en.wikipedia.org/wiki/Pantheon,_Rome</a>. Accessed 13 Sept. 2025.</li>
+      <li>“Pantheon, Rome (Italy): History and Description.” <em>ArcheoRoma</em>, <a href="https://www.archeoroma.org/sites/pantheon/">www.archeoroma.org/sites/pantheon/</a>. Accessed 13 Sept. 2025.</li>
+      <li>Montambaux, Gilles. “How the Sun Illuminates the Pantheon.” PDF, 2024, <a href="https://gilles.montambaux.com/files/misc/How%20the%20sun%20illuminates%20the%20Pantheon.pdf">gilles.montambaux.com/files/misc/How%20the%20sun%20illuminates%20the%20Pantheon.pdf</a>. Accessed 13 Sept. 2025.</li>
 
-      <!-- Video (silent background) -->
-      <li>ZDF Terra X. <em>Ausdehnung des römischen Reiches</em>. 29 Nov. 2021. <em>Wikimedia Commons</em>. <a href="https://commons.wikimedia.org/wiki/File:Ausdehnung_des_r%C3%B6mischen_Reiches.webm">commons.wikimedia.org/wiki/File:Ausdehnung_des_römischen_Reiches.webm</a>.</li>
+      <!-- Video -->
+      <li>AncientVivid (creator). “Pantheon 3D 3.0.” <em>YouTube</em>, 12 Nov. 2016, <a href="https://www.youtube.com/watch?v=eBktmvegPjU">youtube.com/watch?v=eBktmvegPjU</a>. Accessed 13 Sept. 2025.</li>
 
       <!-- Images (Wikimedia Commons) -->
-      <li>Reusch, Pascal. <em>Pantheon and Fountain at Night</em>. <em>Wikimedia Commons</em>. <a href="https://commons.wikimedia.org/wiki/File:Pantheon_and_fountain_at_night.JPG">commons.wikimedia.org/wiki/File:Pantheon_and_fountain_at_night.JPG</a>.</li>
-      <li>daniele_malavolta. <em>Rome Pantheon Facade and Piazza della Rotonda</em>. <em>Wikimedia Commons</em>. <a href="https://commons.wikimedia.org/wiki/File:Rome_Pantheon_facade_and_Piazza_della_Rotonda.jpg">commons.wikimedia.org/wiki/File:Rome_Pantheon_facade_and_Piazza_della_Rotonda.jpg</a>.</li>
-      <li>Wknight94. <em>Pantheon (Rome) Entrance Door</em>. <em>Wikimedia Commons</em>. <a href="https://commons.wikimedia.org/wiki/File:Pantheon_(Rome)_entrance_door.jpg">commons.wikimedia.org/wiki/File:Pantheon_(Rome)_entrance_door.jpg</a>.</li>
-      <li>Livioandronico2013. <em>Pantheon Interior</em>. <em>Wikimedia Commons</em>. <a href="https://commons.wikimedia.org/wiki/File:Pantheon_interior_(45696759504).jpg">commons.wikimedia.org/wiki/File:Pantheon_interior_(45696759504).jpg</a>.</li>
-      <li>Sund, Sheila. <em>Pantheon, Rome with Oculus Lighting</em>. <em>Wikimedia Commons</em>. <a href="https://commons.wikimedia.org/wiki/File:Pantheon,_Rome_with_oculus_lighting_(8404115660).jpg">commons.wikimedia.org/wiki/File:Pantheon,_Rome_with_oculus_lighting_(8404115660).jpg</a>.</li>
-      <li>Perfect Tommy. <em>Pantheon Floor Drainage</em>. <em>Wikimedia Commons</em>. <a href="https://commons.wikimedia.org/wiki/File:Pantheon_floor_drainage.jpg">commons.wikimedia.org/wiki/File:Pantheon_floor_drainage.jpg</a>.</li>
-      <li>John Samuel. <em>Pantheon — Interior 03</em>. <em>Wikimedia Commons</em>. <a href="https://commons.wikimedia.org/wiki/File:Pantheon_(Rome)_-_Interior_03.jpg">commons.wikimedia.org/wiki/File:Pantheon_(Rome)_-_Interior_03.jpg</a>.</li>
-      <li>Anthony M. <em>Pantheon Dome (Exterior)</em>. <em>Wikimedia Commons</em>. <a href="https://commons.wikimedia.org/wiki/File:Pantheon_dome.jpg">commons.wikimedia.org/wiki/File:Pantheon_dome.jpg</a>.</li>
-      <li>Paolo Rosa. <em>Panteon Oculus Light</em>. <em>Wikimedia Commons</em>. <a href="https://commons.wikimedia.org/wiki/File:Panteon_oculus_light.JPG">commons.wikimedia.org/wiki/File:Panteon_oculus_light.JPG</a>.</li>
-      <li>Ank Kumar. <em>The Tomb of Raphael in the Pantheon</em>. <em>Wikimedia Commons</em>. <a href="https://commons.wikimedia.org/wiki/File:The_tomb_of_Raphael_in_the_Pantheon_in_Rome,_Italy_(Ank_Kumar)_06.jpg">commons.wikimedia.org/wiki/File:The_tomb_of_Raphael_in_the_Pantheon_in_Rome,_Italy_(Ank_Kumar)_06.jpg</a>.</li>
+      <li>Reusch, Pascal. <em>Pantheon and Fountain at Night</em>. <em>Wikimedia Commons</em>, <a href="https://commons.wikimedia.org/wiki/File:Pantheon_and_fountain_at_night.JPG">commons.wikimedia.org/wiki/File:Pantheon_and_fountain_at_night.JPG</a>. Accessed 13 Sept. 2025.</li>
+      <li>daniele_malavolta. <em>Rome Pantheon Facade and Piazza della Rotonda</em>. <em>Wikimedia Commons</em>, <a href="https://commons.wikimedia.org/wiki/File:Rome_Pantheon_facade_and_Piazza_della_Rotonda.jpg">commons.wikimedia.org/wiki/File:Rome_Pantheon_facade_and_Piazza_della_Rotonda.jpg</a>. Accessed 13 Sept. 2025.</li>
+      <li>Wknight94. <em>Pantheon (Rome) Entrance Door</em>. <em>Wikimedia Commons</em>, <a href="https://commons.wikimedia.org/wiki/File:Pantheon_(Rome)_entrance_door.jpg">commons.wikimedia.org/wiki/File:Pantheon_(Rome)_entrance_door.jpg</a>. Accessed 13 Sept. 2025.</li>
+      <li>Livioandronico2013. <em>Pantheon Interior</em>. <em>Wikimedia Commons</em>, <a href="https://commons.wikimedia.org/wiki/File:Pantheon_interior_(45696759504).jpg">commons.wikimedia.org/wiki/File:Pantheon_interior_(45696759504).jpg</a>. Accessed 13 Sept. 2025.</li>
+      <li>Sund, Sheila. <em>Pantheon, Rome with Oculus Lighting</em>. <em>Wikimedia Commons</em>, <a href="https://commons.wikimedia.org/wiki/File:Pantheon,_Rome_with_oculus_lighting_(8404115660).jpg">commons.wikimedia.org/wiki/File:Pantheon,_Rome_with_oculus_lighting_(8404115660).jpg</a>. Accessed 13 Sept. 2025.</li>
+      <li>Perfect Tommy. <em>Pantheon Floor Drainage</em>. <em>Wikimedia Commons</em>, <a href="https://commons.wikimedia.org/wiki/File:Pantheon_floor_drainage.jpg">commons.wikimedia.org/wiki/File:Pantheon_floor_drainage.jpg</a>. Accessed 13 Sept. 2025.</li>
+      <li>John Samuel. <em>Pantheon — Interior 03</em>. <em>Wikimedia Commons</em>, <a href="https://commons.wikimedia.org/wiki/File:Pantheon_(Rome)_-_Interior_03.jpg">commons.wikimedia.org/wiki/File:Pantheon_(Rome)_-_Interior_03.jpg</a>. Accessed 13 Sept. 2025.</li>
+      <li>Anthony M. <em>Pantheon Dome (Exterior)</em>. <em>Wikimedia Commons</em>, <a href="https://commons.wikimedia.org/wiki/File:Pantheon_dome.jpg">commons.wikimedia.org/wiki/File:Pantheon_dome.jpg</a>. Accessed 13 Sept. 2025.</li>
+      <li>Paolo Rosa. <em>Panteon Oculus Light</em>. <em>Wikimedia Commons</em>, <a href="https://commons.wikimedia.org/wiki/File:Panteon_oculus_light.JPG">commons.wikimedia.org/wiki/File:Panteon_oculus_light.JPG</a>. Accessed 13 Sept. 2025.</li>
+      <li>Ank Kumar. <em>The Tomb of Raphael in the Pantheon</em>. <em>Wikimedia Commons</em>, <a href="https://commons.wikimedia.org/wiki/File:The_tomb_of_Raphael_in_the_Pantheon_in_Rome,_Italy_(Ank_Kumar)_06.jpg">commons.wikimedia.org/wiki/File:The_tomb_of_Raphael_in_the_Pantheon_in_Rome,_Italy_(Ank_Kumar)_06.jpg</a>. Accessed 13 Sept. 2025.</li>
 
       <!-- Audio -->
-      <li>United States Air Force Band. “The Washington Post — Ceremonial Brass.” <em>Wikimedia Commons</em>. <a href="https://commons.wikimedia.org/wiki/File:The_Washington_Post_-_Ceremonial_Brass_-_United_States_Air_Force_Band.mp3">commons.wikimedia.org/wiki/File:The_Washington_Post_-_Ceremonial_Brass_-_United_States_Air_Force_Band.mp3</a>.</li>
+      <li>United States Air Force Band. “The Washington Post — Ceremonial Brass.” <em>Wikimedia Commons</em>, <a href="https://commons.wikimedia.org/wiki/File:The_Washington_Post_-_Ceremonial_Brass_-_United_States_Air_Force_Band.mp3">commons.wikimedia.org/wiki/File:The_Washington_Post_-_Ceremonial_Brass_-_United_States_Air_Force_Band.mp3</a>. Accessed 13 Sept. 2025.</li>
     </ul>
   </div>
 </aside>
 
 <script>
-/* ========= UTIL ========= */
-const IMG = (file) => `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(file)}?width=1920`;
+/* ===== Utilities & constants ===== */
+const IMG = f => `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(f)}?width=2560`;
 
-/* ========= TOUR CONTENT =========
-   Added a new first slide with a silent background VIDEO.
-   'side' places the text panel left/right so the image remains visible. */
+/* ===== Slides (AP-level; now 17 stops) =====
+   'side' anchors the text panel to reveal more of the photo.
+   First slide uses YouTube embed as a silent, looping background. */
 const slides = [
-  /* PROLOGUE: video background */
+  /* 1 — PROLOGUE with construction-style 3D animation (YouTube, muted, no controls) */
   {
-    type: "video",
-    title: "Prologue — Rome, ‘All the Gods,’ and a New Architecture",
-    side: "right",
-    video: "https://commons.wikimedia.org/wiki/Special:FilePath/Ausdehnung%20des%20r%C3%B6mischen%20Reiches.webm",
-    para: "Pantheon literally joins Greek roots—pan (all) + theoi (gods)—into a Roman statement of universal power. The temple we see is Hadrianic (c. 118–128 CE), yet it preserves Agrippa’s inscription from Augustus’ age. Greeks gave the orders and pediment; Romans fused that classical language to concrete technology, creating a spherical interior unknown to Greece.",
-    bullets: [
-      "Origins: Agrippa’s Pantheon (27–25 BCE) in the Campus Martius; later fires (80 and c.110 CE) led to a complete Hadrianic rebuild.",
-      "Meaning: a house for ‘all gods’ and imperial ideology—cosmos and state in one room.",
-      "Style: Greek portico + Roman rotunda; Corinthian order up front, concrete revolution within.",
-      "People: Augustus and Agrippa (founders); Trajan’s era initiates works; Hadrian likely oversees design; ancient sources mention Apollodorus, but authorship is debated.",
-      "Site: flood-prone Campus Martius—former parade ground; alignment dramatizes the sun’s path through the oculus."
+    type:"youtube",
+    youtubeId:"eBktmvegPjU", /* “Pantheon 3D 3.0” — starts right away */
+    side:"right",
+    title:"Prologue — ‘Pantheon’: All Gods, All Empire",
+    para:"From Greek roots—pan (all) + theoi (gods)—Rome forged a new kind of monument. The Hadrianic rebuild (c. 118–128 CE) preserves Agrippa’s Augustan legacy in the inscription, while translating Greek temple language into a concrete cosmos.",
+    bullets:[
+      "Lineage: Agrippa’s sanctuary (27–25 BCE) burned; Domitian’s rebuild burned again; Hadrian’s team reimagines it anew (likely dedicated c. 126 CE).",
+      "Synthesis: Greek orders + Roman rotunda; exterior piety conceals an unprecedented interior sphere.",
+      "Purpose & debate: divine ‘all-gods’? imperial ideology? an engineered cosmos marking time and rule."
     ]
   },
 
-  {
-    title: "Piazza della Rotonda — First Glimpse",
-    img: IMG("Pantheon and fountain at night.JPG"),
-    side: "left",
-    para: "Fountain, obelisk, and temple front compose a ceremonial approach. The portico frames the city; beyond it, a hidden rotunda holds the surprise.",
-    bullets: [
-      "Form: rectangle before circle—an intentional reveal from open square to enclosed cosmos.",
-      "Greek legacy: columnar facade and pediment announce classical piety.",
-      "Urban history: square reshaped in the Renaissance/Baroque to foreground the porch."
+  /* Urban approach */
+  { title:"Piazza della Rotonda — Processional Approach", img:IMG("Pantheon_and_fountain_at_night.JPG"),
+    side:"left",
+    para:"Fountain, obelisk, and porch choreograph an urban entry. The rectangular portico with Corinthian order frames the city before the spherical surprise.",
+    bullets:[
+      "Form: axial porch ➝ hidden rotunda (rectangle before circle).",
+      "Style: classical orders signal Greek heritage; Rome shifts grandeur inward.",
+      "Topography: Campus Martius floodplain stages civic ritual amidst daily life."
     ]
   },
-  {
-    title: "Facade & Inscription — Agrippa Remembered",
-    img: IMG("Rome Pantheon facade and Piazza della Rotonda.jpg"),
-    side: "right",
-    para: "The entablature reads M·AGRIPPA·L·F·COS·TERTIVM·FECIT. Hadrian keeps the Augustan credit, binding present emperor to a golden past.",
-    bullets: [
-      "Chronology: Agrippa’s temple (27–25 BCE) ➝ burned 80 CE ➝ restored ➝ burned c.110 CE ➝ Hadrianic rebuild c.118–128 CE.",
-      "Columns: 16 in total (8 across the front; two rows of 4) of Egyptian granite—imperial logistics via Nile and Mediterranean.",
-      "Purpose: a ‘pantheon’—possibly for all gods or imperial cult; exact original rites remain debated."
+
+  /* Facade & inscription */
+  { title:"Portico & Inscription — Augustus Remembered",
+    img:IMG("Rome_Pantheon_facade_and_Piazza_della_Rotonda.jpg"),
+    side:"right",
+    para:"M·AGRIPPA·L·F·COS·TERTIVM·FECIT binds Hadrian to Augustan memory. Granite columns from Egypt broadcast empire-wide logistics.",
+    bullets:[
+      "Columns: 16 (8×2) in grey/pink granite; monoliths shipped via Nile & sea.",
+      "Historiography: inscription reused; attribution and dedication remain debated.",
+      "Facade as thesis: Greek temple mask for a Roman volumetric revolution."
     ]
   },
-  {
-    title: "Bronze Doors — Ritual Threshold",
-    img: IMG("Pantheon (Rome) entrance door.jpg"),
-    side: "left",
-    para: "Monumental bronze leaves pivot into shadow. Crossing them shifts us from Rome’s bustle into a uniquely Roman space of geometry and light.",
-    bullets: [
-      "Medium: bronze doors; stone portico; brick-faced concrete for the rotunda.",
-      "Technique: precision hinges and ancient metalwork—surviving in use for centuries.",
-      "Experience: sound mutes, temperature cools—architecture as stagecraft."
+
+  /* Threshold */
+  { title:"Bronze Doors — Crossing into Shadow",
+    img:IMG("Pantheon_(Rome)_entrance_door.jpg"),
+    side:"left",
+    para:"Bronze leaves pivot to a cool, resonant interior. Architecture alters sound, temperature, and light to frame experience.",
+    bullets:[
+      "Medium & technique: bronze carpentry; brick-faced concrete drum within.",
+      "Ritual dramaturgy: threshold compresses, rotunda releases."
     ]
   },
-  {
-    title: "A Perfect Interior — The 43.3 m Sphere",
-    img: IMG("Pantheon_interior_(45696759504).jpg"),
-    side: "right",
-    para: "Height to oculus equals diameter of the floor (≈43.3 m). A virtual sphere fits inside—cosmic order expressed as habitable volume.",
-    bullets: [
-      "Composition: paired Corinthian columns articulate seven bays; rich marble revetments form bands of color.",
-      "Greek vs Roman: Greek temples privilege exterior; Rome turns grandeur inward.",
-      "Meaning: the ruler stands at the center of measured heavens—order made visible."
+
+  /* Sphere */
+  { title:"Interior Geometry — A 43.3 m Sphere",
+    img:IMG("Pantheon_interior_(45696759504).jpg"),
+    side:"right",
+    para:"Height to oculus equals diameter: a perfect sphere implied. Rome turns mathematical space into political theater.",
+    bullets:[
+      "Form & composition: seven articulated bays, colored marble revetments.",
+      "Meaning: cosmic order scaled to the human and imperial center."
     ]
   },
-  {
-    title: "Oculus — Architecture of Light",
-    img: IMG("Pantheon,_Rome_with_oculus_lighting_(8404115660).jpg"),
-    side: "left",
-    para: "A 9 m-wide opening (≈30 Roman feet) admits sky, sun, rain. A moving beam canonizes whichever surface it touches.",
-    bullets: [
-      "Coffers: five rings, diminishing upward—optical rhythm, mass reduction.",
-      "Solar drama: seasonal alignments at noon tie civic ritual to cosmic time.",
-      "Philosophy: a dialogue between material dome and immaterial heavens."
+
+  /* Sun */
+  { title:"Oculus & Sunbeam — Time Made Visible",
+    img:IMG("Pantheon,_Rome_with_oculus_lighting_(8404115660).jpg"),
+    side:"left",
+    para:"A ~9 m oculus admits sky, sun, rain. Scholars argue the moving beam aligned rituals and imperial meaning.",
+    bullets:[
+      "Coffers: five rings lighten mass and rhythm sightlines.",
+      "Solar studies: equinox and April 21 noon effects debated in recent scholarship.",
+      "APS lens: content (cosmos), technique (light as material), POV (imperial theology)."
     ]
   },
-  {
-    title: "Floor & Drains — Let the Rain In",
-    img: IMG("Pantheon_floor_drainage.jpg"),
-    side: "right",
-    para: "Rain falls freely; the floor’s subtle convexity and discreet outlets channel it away. Nature is integrated, not excluded.",
-    bullets: [
-      "Engineering: ~22 drainage holes beneath patterned marble handle storms.",
-      "Design: circles and squares tessellate the pavement—geometry you can walk on."
+
+  /* Floor & drains */
+  { title:"Floor & Hydraulics — Let the Rain In",
+    img:IMG("Pantheon_floor_drainage.jpg"),
+    side:"right",
+    para:"Rain falls; discreet outlets and subtle convexity clear water. Nature is choreographed, not excluded.",
+    bullets:[
+      "Technique: ~22 drains; patterned marble tessellates geometry underfoot.",
+      "Medium: polychrome stones visualize order and empire."
     ]
   },
-  {
-    title: "Materials & Making — Concrete Alchemy",
-    img: IMG("Pantheon_(Rome)_-_Interior_03.jpg"),
-    side: "left",
-    para: "Roman builders grade the concrete: heavy aggregates below, lighter toward the crown—travertine ➝ tufa ➝ pumice.",
-    bullets: [
-      "Walls: ~6 m thick drum conceals relieving arches that redirect thrust into piers.",
-      "Finish: porphyry, giallo antico, pavonazzetto—empire-wide logistics in stone.",
-      "Technique: cast in lifts with wooden centering; coffers lighten and pattern."
+
+  /* Materials science */
+  { title:"Concrete Alchemy — Grading the Mix",
+    img:IMG("Pantheon_(Rome)_-_Interior_03.jpg"),
+    side:"left",
+    para:"Aggregate is graded by height: travertine below ➝ tufa ➝ pumice near the crown. Lighter concrete where stresses demand it.",
+    bullets:[
+      "Structure: ~6 m thick drum with relieving arches; thrust into eight piers.",
+      "Innovation: Roman pozzolanic science anticipates material engineering."
     ]
   },
-  {
-    title: "Dome Outside — Discipline of Mass",
-    img: IMG("Pantheon_dome.jpg"),
-    side: "right",
-    para: "From the street, the dome reads as low and earthy, its ribs faint. The exterior’s understatement masks radical interior space.",
-    bullets: [
-      "Structure: compressive shell crowned by the oculus; thrust resolved by the drum.",
-      "Legacy: world’s largest unreinforced concrete dome—an unbeaten ancient record."
+
+  /* Dome outside */
+  { title:"Exterior Dome — Mass and Modesty",
+    img:IMG("Pantheon_dome.jpg"),
+    side:"right",
+    para:"Outside, the dome sits low and earthy; inside, it becomes the heavens. Understatement protects the surprise.",
+    bullets:[
+      "Record: largest unreinforced concrete dome of antiquity.",
+      "Engineering: thickness tapers from ~6.4 m at springing to ~1.2 m at oculus."
     ]
   },
-  {
-    title: "Air, Weather, and Time",
-    img: IMG("Panteon_oculus_light.JPG"),
-    side: "left",
-    para: "Breeze, rain, and the daily arc of the sun animate the architecture. Time itself becomes a material in the room.",
-    bullets: [
-      "Ritual: the sunbeam often greets entrants at noon—choreographed revelation.",
-      "Audience: orientation, awe, and a recalibration of human scale."
+
+  /* Light & weather */
+  { title:"Air, Weather, and Ritual Time",
+    img:IMG("Panteon_oculus_light.JPG"),
+    side:"left",
+    para:"Breeze, rain, and the daily arc make the space dynamic. On feast days, rose petals descend through the oculus.",
+    bullets:[
+      "Experience: reverse sundial effect; noon beam tracks season.",
+      "Ritual: Pentecost rose-petal shower dramatizes the ‘eye’ of heaven."
     ]
   },
-  {
-    title: "Temple Becomes Church (609 CE)",
-    img: IMG("Pantheon_interior_(45696759504).jpg"),
-    side: "right",
-    para: "Consecrated as Santa Maria ad Martyres, the Pantheon survives through use. Pagan form receives Christian liturgy without losing its cosmic stage.",
-    bullets: [
-      "Continuity: relics translated; altars inserted; processions replace sacrifices.",
-      "Urban fate: church status spared it the spoliation that ruined many temples."
+
+  /* Historiography I */
+  { title:"Who Designed It? — Hadrian, Apollodorus, or Team?",
+    img:IMG("Pantheon_(Rome)_-_Interior_03.jpg"),
+    side:"right",
+    para:"Ancient sources are thin. Later authors credit Hadrian; an Apollodorus story survives but is contested. Modern consensus: a Hadrianic project by an expert team.",
+    bullets:[
+      "Evidence: reused Augustan inscription; lack of contemporary attribution.",
+      "Debate: authorship and purpose remain open scholarly questions."
     ]
   },
-  {
-    title: "Raphael and the Kings",
-    img: IMG("The_tomb_of_Raphael_in_the_Pantheon_in_Rome,_Italy_(Ank_Kumar)_06.jpg"),
-    side: "left",
-    para: "Raphael chose to rest here; modern Italy’s kings did too. Art, nation, and antiquity share one ceremonial shell.",
-    bullets: [
-      "Raphael’s epitaph: Nature feared being outdone by him in life—and to die with him.",
-      "Civic shrine: royal tombs bind national identity to an ancient monument."
+
+  /* Historiography II: Campus Martius & the Sun */
+  { title:"Campus Martius — Sun, State, and the City",
+    img:IMG("Pantheon_interior_(45696759504).jpg"),
+    side:"left",
+    para:"Set on the floodplain of Mars, near Augustan monuments, the rotunda likely engaged solar alignments and imperial symbolism.",
+    bullets:[
+      "Setting: near Ara Pacis, Horologium, and Mausoleum of Augustus.",
+      "Solar thesis: beam at key dates/angles as imperial sign (debated)."
     ]
   },
-  {
-    title: "Losses & Afterlives",
-    img: IMG("Pantheon_(Rome)_-_Interior_03.jpg"),
-    side: "right",
-    para: "Bronze once glittered in the portico’s coffers; later ages reused it for cannons and St. Peter’s. Yet the Pantheon’s essential ideas endure.",
-    bullets: [
-      "Barberini tale: “What the barbarians did not do, the Barberini did.”",
-      "Influence: from Brunelleschi’s Florence to the U.S. Capitol and beyond."
+
+  /* Logistics */
+  { title:"Empire in Motion — Quarries, Ships, Labor",
+    img:IMG("Rome_Pantheon_facade_and_Piazza_della_Rotonda.jpg"),
+    side:"right",
+    para:"Egyptian granite monoliths, colored marbles, and brick stamps trace a web of extraction and transport powering Roman building.",
+    bullets:[
+      "Supply chains: Mons Claudianus & Aswan granite to Ostia to Rome.",
+      "Labor & craft: specialized guilds; precise centering and formwork."
     ]
   },
-  {
-    title: "Return to the Square",
-    img: IMG("Rome_Pantheon_facade_and_Piazza_della_Rotonda.jpg"),
-    side: "left",
-    para: "Obelisk and fountain draw us back into Rome. The porch invites; the rotunda keeps its celestial secret—ever ready to astonish the next generation.",
-    bullets: [
-      "Synthesis recap: Form, Content, Style, Medium, Technique, POV, and Legacy fuse into living architecture.",
-      "Takeaway: Greek language of orders + Roman concrete imagination = a building for all time."
+
+  /* Function change */
+  { title:"609 CE — From Temple to Church",
+    img:IMG("Pantheon_interior_(45696759504).jpg"),
+    side:"left",
+    para:"Consecrated as Santa Maria ad Martyres, the building survives through adaptive reuse—pagan form, Christian liturgy.",
+    bullets:[
+      "Continuity: relics installed; processions replace sacrifices.",
+      "Consequence: continuous maintenance spared it from ruin."
+    ]
+  },
+
+  /* Memory */
+  { title:"Raphael & Modern Kings — Memorial Pantheon",
+    img:IMG("The_tomb_of_Raphael_in_the_Pantheon_in_Rome,_Italy_(Ank_Kumar)_06.jpg"),
+    side:"right",
+    para:"Artists and rulers sought burial here—binding national identity and Renaissance art to an antique shell.",
+    bullets:[
+      "Inscription: Nature feared being outdone by Raphael.",
+      "Modern nationhood: royal burials anchor civic memory."
+    ]
+  },
+
+  /* Loss & Legacy */
+  { title:"Spolia, Losses, and Global Influence",
+    img:IMG("Pantheon_(Rome)_-_Interior_03.jpg"),
+    side:"left",
+    para:"Bronze once glittered in the portico; later ages repurposed it. Yet the archetype endures—from Brunelleschi to capitols worldwide.",
+    bullets:[
+      "Quip: “What the barbarians didn’t do, the Barberini did.”",
+      "Legacy: portico-plus-dome echoes across centuries."
+    ]
+  },
+
+  /* AP Synthesis */
+  { title:"AP Synthesis — Form • Content • Style • Medium • Technique • POV • Legacy",
+    img:IMG("Rome_Pantheon_facade_and_Piazza_della_Rotonda.jpg"),
+    side:"right",
+    para:"The Pantheon fuses Greek style and Roman science to stage imperial cosmology in built form.",
+    bullets:[
+      "<strong>Form</strong>: porch + rotunda, perfect sphere, axial procession.",
+      "<strong>Content</strong>: cosmic order; imperial ideology; engineered hierophany.",
+      "<strong>Style</strong>: classical orders with Roman volumetrics.",
+      "<strong>Medium</strong>: brick-faced concrete; marble revetments; bronze.",
+      "<strong>Technique</strong>: graded aggregates; coffering; relieving arches; drains.",
+      "<strong>POV</strong>: Hadrianic philhellenism and state theology.",
+      "<strong>Legacy</strong>: continuous use; global architectural progeny."
     ]
   }
 ];
 
-/* ========= RENDER ========= */
+/* ===== Render engine ===== */
 const app = document.getElementById('app');
-const progressEl = document.getElementById('progress');
-
 function makeImageSlide(s){
-  const el = document.createElement('section');
-  el.className = 'slide';
-  el.style.backgroundImage = `url("${s.img}")`;
-
-  const panel = document.createElement('article');
-  panel.className = `panel ${s.side||'right'}`;
-  panel.innerHTML = `
-      <h2 class="title">${s.title}</h2>
-      <p class="para">${s.para}</p>
-      ${s.bullets?.length ? `<ul class="bullets">${s.bullets.map(b=>`<li>${b}</li>`).join('')}</ul>` : ``}
-  `;
+  const el=document.createElement('section'); el.className='slide';
+  const bg=document.createElement('div'); bg.className='slideBG'; bg.style.backgroundImage=`url("${s.img}")`; el.appendChild(bg);
+  const panel=document.createElement('article'); panel.className=`panel ${s.side||'right'}`;
+  panel.innerHTML = `<h2 class="title">${s.title}</h2>
+    <p class="para">${s.para}</p>
+    ${s.bullets?.length?`<ul class="bullets">${s.bullets.map(b=>`<li>${b}</li>`).join('')}</ul>`:''}`;
   el.appendChild(panel);
   return el;
 }
-
 function makeVideoSlide(s){
-  const el = document.createElement('section');
-  el.className = 'slide';
-  const wrap = document.createElement('div');
-  wrap.className = 'vid-wrap';
-  const v = document.createElement('video');
-  v.src = s.video;
-  v.muted = true; v.autoplay = true; v.loop = true; v.playsInline = true;
-  v.setAttribute('preload','auto');
-  wrap.appendChild(v);
-  const scrim = document.createElement('div'); scrim.className = 'vid-scrim';
-  wrap.appendChild(scrim);
-  el.appendChild(wrap);
-
-  const panel = document.createElement('article');
-  panel.className = `panel ${s.side||'right'}`;
-  panel.innerHTML = `
-      <h2 class="title">${s.title}</h2>
-      <p class="para">${s.para}</p>
-      ${s.bullets?.length ? `<ul class="bullets">${s.bullets.map(b=>`<li>${b}</li>`).join('')}</ul>` : ``}
-  `;
-  el.appendChild(panel);
+  const el=document.createElement('section'); el.className='slide';
+  const wrap=document.createElement('div'); wrap.className='vid-wrap';
+  const v=document.createElement('video'); v.src=s.video; v.muted=true; v.autoplay=true; v.loop=true; v.playsInline=true; v.setAttribute('preload','auto');
+  wrap.appendChild(v); const scrim=document.createElement('div'); scrim.className='vid-scrim'; wrap.appendChild(scrim); el.appendChild(wrap);
+  const panel=document.createElement('article'); panel.className=`panel ${s.side||'right'}`;
+  panel.innerHTML=`<h2 class="title">${s.title}</h2><p class="para">${s.para}</p>${s.bullets?.length?`<ul class="bullets">${s.bullets.map(b=>`<li>${b}</li>`).join('')}</ul>`:''}`; el.appendChild(panel);
   return el;
 }
-
-function makeSlide(s){
-  return s.type === 'video' ? makeVideoSlide(s) : makeImageSlide(s);
+function makeYouTubeSlide(s){
+  const el=document.createElement('section'); el.className='slide';
+  const wrap=document.createElement('div'); wrap.className='yt-wrap';
+  const src=`https://www.youtube.com/embed/${s.youtubeId}?autoplay=1&mute=1&controls=0&rel=0&modestbranding=1&playsinline=1&loop=1&playlist=${s.youtubeId}&start=0`;
+  const iframe=document.createElement('iframe'); iframe.src=src; iframe.setAttribute('frameborder','0'); iframe.setAttribute('allow','autoplay; encrypted-media'); iframe.setAttribute('referrerpolicy','no-referrer-when-downgrade');
+  wrap.appendChild(iframe); const scrim=document.createElement('div'); scrim.className='yt-scrim'; wrap.appendChild(scrim); el.appendChild(wrap);
+  const panel=document.createElement('article'); panel.className=`panel ${s.side||'right'}`;
+  panel.innerHTML=`<h2 class="title">${s.title}</h2><p class="para">${s.para}</p>${s.bullets?.length?`<ul class="bullets">${s.bullets.map(b=>`<li>${b}</li>`).join('')}</ul>`:''}`; el.appendChild(panel);
+  return el;
 }
-
+function makeSlide(s){ if(s.type==="video") return makeVideoSlide(s); if(s.type==="youtube") return makeYouTubeSlide(s); return makeImageSlide(s); }
 slides.forEach(s=> app.appendChild(makeSlide(s)));
-
-const slideEls = [...document.querySelectorAll('.slide')];
-let i = 0;
-const total = slideEls.length;
-const progress = ()=> progressEl.textContent = `${i+1} / ${total}`;
-
-function show(n){
-  if(n<0||n>=total||n===i) return;
-  slideEls[i].classList.remove('active');
-  slideEls[n].classList.add('active');
-  i = n; progress();
+const slideEls=[...document.querySelectorAll('.slide')];
+let i=0, total=slideEls.length; const progressEl=document.getElementById('progress');
+function progress(){progressEl.textContent=`${i+1} / ${total}`;}
+function show(n,dir=1){ if(n<0||n>=total||n===i) return;
+  slideEls[i].classList.remove('active'); const nextEl=slideEls[n]; nextEl.classList.add('active');
+  nextEl.classList.remove('enter-left','enter-right'); nextEl.classList.add(dir>0?'enter-right':'enter-left');
+  i=n; progress();
 }
-function next(){ if(i<total-1) show(i+1); }
-function prev(){ if(i>0) show(i-1); }
+function next(){ if(i<total-1) show(i+1, +1); }
+function prev(){ if(i>0) show(i-1, -1); }
 
-/* ========= HOME & AUDIO ========= */
-const begin = document.getElementById('begin');
-const home = document.getElementById('home');
-const appRoot = document.getElementById('app');
-const bgm = document.getElementById('bgm');
-const audioToggle = document.getElementById('audioToggle');
-
+/* ===== Home & controls ===== */
+const begin=document.getElementById('begin'), home=document.getElementById('home'), appRoot=document.getElementById('app');
+const bgm=document.getElementById('bgm'), audioToggle=document.getElementById('audioToggle');
 begin.addEventListener('click', async ()=>{
-  home.style.display='none';
-  appRoot.style.display='block';
-  slideEls[0].classList.add('active');
-  progress();
-  try { await bgm.play(); audioToggle.textContent='⏸︎ Music'; } catch(e){ audioToggle.textContent='▶︎ Music'; }
+  home.style.display='none'; appRoot.style.display='block';
+  slideEls[0].classList.add('active','enter-right'); progress();
+  try{ await bgm.play(); audioToggle.textContent='⏸︎ Music'; }catch(e){ audioToggle.textContent='▶︎ Music'; }
+  startAuto(); /* auto-play ON by default */
 });
-
-document.getElementById('next').onclick = next;
-document.getElementById('prev').onclick = prev;
-
-document.addEventListener('keydown', (e)=>{
+document.getElementById('next').onclick=next; document.getElementById('prev').onclick=prev;
+document.addEventListener('keydown', e=>{
   if(sourcesOpen) return;
   if(e.code==='Space'){ e.preventDefault(); next(); }
   else if(e.code==='Backspace'){ e.preventDefault(); prev(); }
   else if(e.code==='ArrowRight'){ next(); }
   else if(e.code==='ArrowLeft'){ prev(); }
 });
-
 audioToggle.addEventListener('click', async ()=>{
   if(bgm.paused){ await bgm.play(); audioToggle.textContent='⏸︎ Music'; }
   else{ bgm.pause(); audioToggle.textContent='▶︎ Music'; }
 });
 
-/* ========= SOURCES PANEL ========= */
-const sourcesBtn = document.getElementById('sourcesBtn');
-const sourcesPane = document.getElementById('sourcesPane');
-const closeSources = document.getElementById('closeSources');
-let sourcesOpen=false;
-sourcesBtn.onclick = ()=>{ sourcesPane.style.display='block'; sourcesOpen=true; };
-closeSources.onclick = ()=>{ sourcesPane.style.display='none'; sourcesOpen=false; };
+/* ===== Auto-advance with pause ===== */
+const autoToggle=document.getElementById('autoToggle'); let autoTimer=null, autoOn=true, AUTO_MS=12000;
+function startAuto(){ clearInterval(autoTimer); autoOn=true; autoToggle.textContent='⏸︎ Auto';
+  autoTimer=setInterval(()=>{ if(i<total-1) next(); else{ clearInterval(autoTimer); autoOn=false; autoToggle.textContent='▶︎ Auto'; } }, AUTO_MS);
+}
+function stopAuto(){ clearInterval(autoTimer); autoOn=false; autoToggle.textContent='▶︎ Auto'; }
+autoToggle.addEventListener('click', ()=>{ autoOn?stopAuto():startAuto(); });
 
-/* ========= PRELOAD IMAGES ========= */
+/* ===== Sources panel ===== */
+const sourcesBtn=document.getElementById('sourcesBtn'), sourcesPane=document.getElementById('sourcesPane'), closeSources=document.getElementById('closeSources');
+let sourcesOpen=false;
+sourcesBtn.onclick=()=>{ sourcesPane.style.display='block'; sourcesOpen=true; };
+closeSources.onclick=()=>{ sourcesPane.style.display='none'; sourcesOpen=false; };
+
+/* ===== Preload images ===== */
 slides.filter(s=>s.img).forEach(s=>{ const im=new Image(); im.src=s.img; });
 </script>
 </body>
