@@ -1,270 +1,446 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Pantheon Virtual Tour</title>
-  <style>
-    html,body{height:100%;margin:0;background:#0b0c10;overflow:hidden}
-    #c{position:fixed;inset:0}
-    .ui{position:fixed;left:12px;top:12px;z-index:10;display:flex;gap:8px;flex-wrap:wrap;
-        font:14px/1.2 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
-    .btn{background:rgba(20,20,30,.75);color:#fff;border:1px solid rgba(255,255,255,.25);
-         padding:8px 10px;border-radius:8px;cursor:pointer;backdrop-filter:blur(3px)}
-    .btn:hover{background:rgba(30,30,44,.9)}
-    .hint{color:#ddd;font-size:12px;padding:8px 10px;border-radius:8px;background:rgba(20,20,30,.45);
-          border:1px solid rgba(255,255,255,.2)}
-    .overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;
-             opacity:0;pointer-events:none;transition:.3s;z-index:20}
-    .overlay.show{opacity:1;pointer-events:auto}
-    .card{max-width:640px;width:calc(100% - 40px);background:#fff;color:#111;border-radius:12px;
-          box-shadow:0 30px 100px rgba(0,0,0,.6);padding:18px 20px;position:relative}
-    .card h2{margin:0 0 6px} .card p{margin:0 0 10px;line-height:1.5}
-    .close{position:absolute;right:10px;top:10px;border:none;background:#e33;color:#fff;border-radius:6px;padding:6px 10px;cursor:pointer}
-    .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:16px;background:rgba(24,24,30,.85);color:#fff;padding:8px 12px;border-radius:8px;font:12px/1.2 system-ui;z-index:30;opacity:0;transition:.3s}
-    .toast.show{opacity:1}
-    .status{position:fixed;right:12px;top:12px;background:rgba(255,230,0,.1);color:#ffd400;border:1px solid rgba(255,212,0,.4);
-            padding:6px 10px;border-radius:8px;font:12px/1.2 system-ui;z-index:15;display:none}
-    .status.err{background:rgba(255,60,60,.12);color:#ffb3b3;border-color:rgba(255,60,60,.35);display:block}
-    .status.ok{background:rgba(60,255,120,.12);color:#caffd2;border-color:rgba(60,255,120,.35);display:block}
-  </style>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Pantheon • Immersive Tour</title>
+
+<!-- Performance: preconnect for fast image/audio loads -->
+<link rel="preconnect" href="https://commons.wikimedia.org" crossorigin>
+<link rel="preconnect" href="https://upload.wikimedia.org" crossorigin>
+
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Great+Vibes&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --bg:#0b0b0e;
+    --fg:#f2efe9;
+    --muted:#cfc9bb;
+    --accent:#e15b5b;
+    --accent-2:#a33d3d;
+    --glass:rgba(10,10,14,.55);
+    --card:rgba(16,16,20,.65);
+    --shadow: 0 10px 40px rgba(0,0,0,.45);
+    --radius:16px;
+    --maxw:1050px;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0;background:var(--bg);color:var(--fg);
+    font-family: "Cinzel", serif; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+    overflow:hidden;
+  }
+
+  /* Home */
+  #home{
+    position:fixed; inset:0; display:grid; place-items:center;
+    background:#000 url("https://commons.wikimedia.org/wiki/Special:FilePath/Pantheon%20and%20fountain%20at%20night.JPG?width=1920") center/cover no-repeat;
+  }
+  .veil{position:absolute; inset:0; background:linear-gradient(180deg,rgba(0,0,0,.55),rgba(0,0,0,.65))}
+  .home-card{
+    position:relative; z-index:2; max-width:var(--maxw);
+    background:var(--card); border:1px solid rgba(255,255,255,.08);
+    border-radius:var(--radius); padding:24px; box-shadow:var(--shadow);
+    text-align:center; backdrop-filter: blur(6px);
+  }
+  .home-title{font-size:clamp(28px,4.2vw,56px); letter-spacing:.6px; margin:0 0 6px}
+  .home-sub{opacity:.9; margin:0 0 18px}
+  .mla{
+    margin:16px auto 22px; display:inline-block; text-align:left; line-height:1.6;
+    padding:12px 16px; background:rgba(255,255,255,.05); border-radius:10px; border:1px solid rgba(255,255,255,.07)
+  }
+  .home-btn{
+    appearance:none; border:none; cursor:pointer;
+    background:linear-gradient(180deg,var(--accent),var(--accent-2));
+    color:#fff; padding:14px 22px; border-radius:12px; font-size:18px; font-weight:700;
+    box-shadow:0 10px 30px rgba(225,91,91,.25);
+    transition:transform .2s ease, box-shadow .2s ease, filter .2s ease;
+  }
+  .home-btn:hover{transform:translateY(-2px); filter:saturate(1.05); box-shadow:0 14px 32px rgba(225,91,91,.35)}
+  .hint{margin-top:10px; font-size:14px; color:var(--muted); opacity:.9}
+
+  /* App chrome */
+  #app{position:fixed; inset:0; display:none}
+  .slide{
+    position:absolute; inset:0; display:grid; grid-template-rows:1fr auto; place-items:stretch;
+    background:#000 center/cover no-repeat; opacity:0; pointer-events:none;
+    transform:scale(1.02); transition:opacity .7s ease, transform .7s ease;
+  }
+  .slide::before{ /* darken for readability */
+    content:""; position:absolute; inset:0; background:radial-gradient(1200px 600px at 60% 70%,rgba(0,0,0,.15),rgba(0,0,0,.65) 60%, rgba(0,0,0,.85));
+  }
+  .slide.active{opacity:1; transform:scale(1); pointer-events:auto}
+  .content{
+    position:relative; z-index:2; padding:22px; display:flex; justify-content:center;
+  }
+  .card{
+    width:min(92vw,var(--maxw));
+    background:var(--glass); border:1px solid rgba(255,255,255,.08);
+    border-radius:var(--radius); padding:18px 18px 16px; margin:0 auto 28px; box-shadow:var(--shadow);
+    backdrop-filter: blur(6px);
+  }
+  .title{font-size:clamp(22px,3vw,32px); margin:0 0 8px; color:#f0e6d2}
+  .para{margin:6px 2px 8px; line-height:1.65; font-size:clamp(15px,1.4vw,18px)}
+  .bullets{margin:8px 6px 4px 22px; padding:0}
+  .bullets li{margin:8px 0; line-height:1.55; font-size:clamp(14px,1.3vw,17px)}
+  .foot{
+    display:flex; justify-content:space-between; align-items:center; gap:12px;
+    padding:0 18px 18px;
+  }
+  .progress{
+    position:fixed; top:12px; left:50%; transform:translateX(-50%);
+    z-index:10; background:rgba(0,0,0,.45); padding:6px 12px; border-radius:999px; font-size:14px; border:1px solid rgba(255,255,255,.08)
+  }
+  .navbtn{
+    position:fixed; top:50%; transform:translateY(-50%); z-index:8;
+    width:46px; height:46px; border-radius:50%; border:1px solid rgba(255,255,255,.18);
+    display:grid; place-items:center; background:rgba(0,0,0,.35); color:#fff; cursor:pointer;
+    transition:transform .15s ease, background .2s ease; user-select:none;
+  }
+  .navbtn:hover{transform:translateY(-50%) scale(1.04); background:rgba(0,0,0,.45)}
+  #prev{left:14px} #next{right:14px}
+
+  /* Buttons: audio + sources */
+  .audio{
+    position:fixed; left:12px; bottom:12px; z-index:12;
+    background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.12);
+    color:#fff; padding:8px 12px; border-radius:10px; cursor:pointer;
+  }
+  .sources{
+    position:fixed; right:12px; bottom:12px; z-index:12;
+    border:none; background:transparent; cursor:pointer;
+    font-family:"Great Vibes", cursive; font-size:28px; color:#ffb3b3; text-shadow:0 2px 8px rgba(0,0,0,.7);
+  }
+
+  /* Sources overlay */
+  #sourcesPane{
+    position:fixed; inset:0; display:none; z-index:30; background:rgba(0,0,0,.88);
+  }
+  .sources-wrap{
+    max-width:min(1000px,92vw); margin:6vh auto; background:var(--card);
+    border:1px solid rgba(255,255,255,.08); border-radius:18px; padding:22px 22px 10px;
+    box-shadow:var(--shadow); height:88vh; overflow:auto;
+  }
+  .sources-wrap h2{
+    text-align:center; margin:4px 0 14px; color:#ffbebe; font-weight:700;
+  }
+  .sources-wrap ul{list-style:none; padding:0; margin:0}
+  .sources-wrap li{margin:10px 0 16px; line-height:1.5}
+  .closeX{
+    position:sticky; top:6px; float:right; margin-right:-8px;
+    font-size:22px; background:none; color:#ffbebe; border:none; cursor:pointer;
+  }
+  .sources-wrap a{color:#9ec5ff; text-decoration:none}
+  .sources-wrap a:hover{text-decoration:underline}
+
+  /* Enter/exit motion */
+  .slide.entering{animation:enter .7s ease both}
+  .slide.exiting{animation:exit .55s ease both}
+  @keyframes enter{from{opacity:0; transform:scale(1.03)} to{opacity:1; transform:scale(1)}}
+  @keyframes exit{from{opacity:1; transform:scale(1)} to{opacity:0; transform:scale(1.02)}}
+
+  /* Small screens */
+  @media (max-width:700px){
+    .bullets{margin-left:18px}
+    .navbtn{display:none}
+  }
+</style>
 </head>
 <body>
-  <canvas id="c"></canvas>
 
-  <div class="ui">
-    <button id="free" class="btn">Enter Free Bird’s-Eye</button>
-    <button id="reset" class="btn">Reset View</button>
-    <button id="outside" class="btn">Outside</button>
-    <button id="inside" class="btn">Inside</button>
-    <span class="hint">Orbit: drag • Zoom: wheel • Pan: Shift+drag • Click glowing points • Free: W/A/S/D + Q/E</span>
+<!-- HOME -->
+<section id="home" aria-label="Homepage">
+  <div class="veil" aria-hidden="true"></div>
+  <div class="home-card">
+    <h1 class="home-title">The Roman Pantheon</h1>
+    <p class="home-sub">An immersive, AP-level guided tour</p>
+    <!-- MLA-style header -->
+    <div class="mla">
+      Amogh Bhat<br/>
+      Mr. Loggins<br/>
+      Period 3<br/>
+      17 October 2025
+    </div><br/>
+    <button id="begin" class="home-btn">Begin Tour of Pantheon</button>
+    <div class="hint">Press <strong>Space</strong> to advance • <strong>Backspace</strong> to go back</div>
   </div>
+</section>
 
-  <div id="overlay" class="overlay"><div class="card">
-    <button class="close" id="close">&times;</button>
-    <div id="info"></div>
-  </div></div>
-  <div id="toast" class="toast"></div>
-  <div id="status" class="status"></div>
+<!-- APP -->
+<main id="app" aria-live="polite">
+  <div class="progress" id="progress">1 / 13</div>
+  <button id="prev" class="navbtn" aria-label="Previous slide">⟵</button>
+  <button id="next" class="navbtn" aria-label="Next slide">⟶</button>
 
-  <script type="module">
-    import * as THREE from 'https://unpkg.com/three@0.157.0/build/three.module.js';
-    import { OrbitControls } from 'https://unpkg.com/three@0.157.0/examples/jsm/controls/OrbitControls.js';
-    import { FlyControls } from 'https://unpkg.com/three@0.157.0/examples/jsm/controls/FlyControls.js';
-    import { GLTFLoader } from 'https://unpkg.com/three@0.157.0/examples/jsm/loaders/GLTFLoader.js';
+  <!-- Slides are inserted here -->
+</main>
 
-    const canvas = document.getElementById('c');
-    const overlay = document.getElementById('overlay');
-    const infoDiv = document.getElementById('info');
-    const closeBtn = document.getElementById('close');
-    const toast = document.getElementById('toast');
-    const status = document.getElementById('status');
-    const btnFree = document.getElementById('free');
-    const btnReset = document.getElementById('reset');
-    const btnOut  = document.getElementById('outside');
-    const btnIn   = document.getElementById('inside');
+<!-- Controls -->
+<button class="audio" id="audioToggle" aria-label="Pause or play background music">⏸︎ Music</button>
+<button class="sources" id="sourcesBtn" aria-label="Open sources used">Sources Used</button>
 
-    function showInfo(html){ infoDiv.innerHTML=html; overlay.classList.add('show'); }
-    function hideInfo(){ overlay.classList.remove('show'); }
-    function toastMsg(t,ms=2200){ toast.textContent=t; toast.classList.add('show'); setTimeout(()=>toast.classList.remove('show'), ms); }
-    function statusMsg(t, ok=false, err=false){
-      status.textContent = t;
-      status.className = 'status' + (ok?' ok':'') + (err?' err':'');
-      status.style.display = 'block';
-    }
-    closeBtn.onclick=hideInfo; overlay.onclick=(e)=>{ if(e.target===overlay) hideInfo(); };
+<!-- Background music (public domain march, instrumental) -->
+<audio id="bgm" preload="auto" loop>
+  <source src="https://commons.wikimedia.org/wiki/Special:FilePath/The%20Washington%20Post%20-%20Ceremonial%20Brass%20-%20United%20States%20Air%20Force%20Band.mp3" type="audio/mpeg">
+  <source src="https://commons.wikimedia.org/wiki/Special:FilePath/The%20Washington%20Post%20-%20Ceremonial%20Brass%20-%20United%20States%20Air%20Force%20Band.ogg" type="audio/ogg">
+</audio>
 
-    const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x0b0c10);
-    const renderer = new THREE.WebGLRenderer({canvas, antialias:true});
-    renderer.setPixelRatio(Math.min(devicePixelRatio,2));
-    renderer.setSize(innerWidth, innerHeight);
-    renderer.outputColorSpace = THREE.SRGBColorSpace;
-    renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.shadowMap.enabled = true;
-    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+<!-- Sources pane -->
+<aside id="sourcesPane" role="dialog" aria-modal="true" aria-labelledby="srcTitle">
+  <div class="sources-wrap">
+    <button class="closeX" id="closeSources" title="Close">✕</button>
+    <h2 id="srcTitle">Sources Used — MLA</h2>
+    <ul>
+      <!-- Core references -->
+      <li>The Editors of <em>Encyclopaedia Britannica</em>. “Pantheon.” <em>Britannica</em>, 29 July 2025. <a href="https://www.britannica.com/topic/Pantheon-building-Rome-Italy">https://www.britannica.com/topic/Pantheon-building-Rome-Italy</a>.</li>
+      <li>Harris, Beth, and Steven Zucker. “The Pantheon (Rome).” <em>Smarthistory</em>. <a href="https://smarthistory.org/the-pantheon/">https://smarthistory.org/the-pantheon/</a>.</li>
+      <li>Pantheon Roma. “The Millennial-Old History of the Pantheon of Rome.” <em>PantheonRoma.com</em>. <a href="https://www.pantheonroma.com/pantheon-history/">https://www.pantheonroma.com/pantheon-history/</a>.</li>
+      <li>Hannah, Robert, and Giulio Magli. “The Role of the Sun in the Pantheon’s Design and Meaning.” <em>Numen</em> 58.4 (2011): 486–513. Preprint, arXiv, 2009. <a href="https://arxiv.org/abs/0910.0128">https://arxiv.org/abs/0910.0128</a>.</li>
+      <li>“Pantheon, Rome.” <em>Wikipedia</em>, last updated 2025. <a href="https://en.wikipedia.org/wiki/Pantheon,_Rome">https://en.wikipedia.org/wiki/Pantheon,_Rome</a>.</li>
+      <li>“Fontana del Pantheon.” <em>Wikipedia</em>, 2025. <a href="https://en.wikipedia.org/wiki/Fontana_del_Pantheon">https://en.wikipedia.org/wiki/Fontana_del_Pantheon</a>.</li>
+      <li>“Santa Maria ad Martyres (Pantheon).” <em>Churches of Rome</em>. <a href="https://www.churches-of-rome.info/CoR_Info/SMadMartyres-386/Pantheon.html">https://www.churches-of-rome.info/CoR_Info/SMadMartyres-386/Pantheon.html</a>.</li>
+      <li>“Pantheon (Rome) — ArcheoRoma.” <em>ArcheoRoma</em>. <a href="https://www.archeoroma.org/sites/pantheon/">https://www.archeoroma.org/sites/pantheon/</a>.</li>
 
-    const camera = new THREE.PerspectiveCamera(60, innerWidth/innerHeight, 0.1, 2000);
-    camera.position.set(0, 12, -85);
+      <!-- Images (Wikimedia Commons) -->
+      <li>Reusch, Pascal. <em>Pantheon and Fountain at Night</em>. <em>Wikimedia Commons</em>. <a href="https://commons.wikimedia.org/wiki/File:Pantheon_and_fountain_at_night.JPG">commons.wikimedia.org/wiki/File:Pantheon_and_fountain_at_night.JPG</a>.</li>
+      <li>daniele_malavolta. <em>Rome Pantheon Facade and Piazza della Rotonda</em>. <em>Wikimedia Commons</em>. <a href="https://commons.wikimedia.org/wiki/File:Rome_Pantheon_facade_and_Piazza_della_Rotonda.jpg">commons.wikimedia.org/wiki/File:Rome_Pantheon_facade_and_Piazza_della_Rotonda.jpg</a>.</li>
+      <li>Wknight94. <em>Pantheon (Rome) Entrance Door</em>. <em>Wikimedia Commons</em>. <a href="https://commons.wikimedia.org/wiki/File:Pantheon_(Rome)_entrance_door.jpg">commons.wikimedia.org/wiki/File:Pantheon_(Rome)_entrance_door.jpg</a>.</li>
+      <li>Livioandronico2013. <em>Pantheon Interior</em>. <em>Wikimedia Commons</em>. <a href="https://commons.wikimedia.org/wiki/File:Pantheon_interior_(45696759504).jpg">commons.wikimedia.org/wiki/File:Pantheon_interior_(45696759504).jpg</a>.</li>
+      <li>Sund, Sheila. <em>Pantheon, Rome with Oculus Lighting</em>. <em>Wikimedia Commons</em>. <a href="https://commons.wikimedia.org/wiki/File:Pantheon,_Rome_with_oculus_lighting_(8404115660).jpg">commons.wikimedia.org/wiki/File:Pantheon,_Rome_with_oculus_lighting_(8404115660).jpg</a>.</li>
+      <li>Perfect Tommy. <em>Pantheon Floor Drainage</em>. <em>Wikimedia Commons</em>. <a href="https://commons.wikimedia.org/wiki/File:Pantheon_floor_drainage.jpg">commons.wikimedia.org/wiki/File:Pantheon_floor_drainage.jpg</a>.</li>
+      <li>John Samuel. <em>Pantheon — Interior 03</em>. <em>Wikimedia Commons</em>. <a href="https://commons.wikimedia.org/wiki/File:Pantheon_(Rome)_-_Interior_03.jpg">commons.wikimedia.org/wiki/File:Pantheon_(Rome)_-_Interior_03.jpg</a>.</li>
+      <li>Anthony M. <em>Pantheon Dome (Exterior)</em>. <em>Wikimedia Commons</em>. <a href="https://commons.wikimedia.org/wiki/File:Pantheon_dome.jpg">commons.wikimedia.org/wiki/File:Pantheon_dome.jpg</a>.</li>
+      <li>Paolo Rosa. <em>Panteon Oculus Light</em>. <em>Wikimedia Commons</em>. <a href="https://commons.wikimedia.org/wiki/File:Panteon_oculus_light.JPG">commons.wikimedia.org/wiki/File:Panteon_oculus_light.JPG</a>.</li>
+      <li>Ank Kumar. <em>The Tomb of Raphael in the Pantheon</em>. <em>Wikimedia Commons</em>. <a href="https://commons.wikimedia.org/wiki/File:The_tomb_of_Raphael_in_the_Pantheon_in_Rome,_Italy_(Ank_Kumar)_06.jpg">commons.wikimedia.org/wiki/File:The_tomb_of_Raphael_in_the_Pantheon_in_Rome,_Italy_(Ank_Kumar)_06.jpg</a>.</li>
+      <li>Ricardo André Frantz (Tetraktys). <em>Raphael’s Tomb</em>. <em>Wikimedia Commons</em>. <a href="https://commons.wikimedia.org/wiki/File:Pantheon-raphaels-tomb.jpg">commons.wikimedia.org/wiki/File:Pantheon-raphaels-tomb.jpg</a>.</li>
 
-    const orbit = new OrbitControls(camera, renderer.domElement);
-    orbit.enableDamping=true; orbit.dampingFactor=0.08; orbit.minDistance=6; orbit.maxDistance=250; orbit.maxPolarAngle=Math.PI*0.495;
-    orbit.target.set(0,14,0);
+      <!-- Audio -->
+      <li>United States Air Force Band. “The Washington Post — Ceremonial Brass.” <em>Wikimedia Commons</em>. <a href="https://commons.wikimedia.org/wiki/File:The_Washington_Post_-_Ceremonial_Brass_-_United_States_Air_Force_Band.mp3">commons.wikimedia.org/wiki/File:The_Washington_Post_-_Ceremonial_Brass_-_United_States_Air_Force_Band.mp3</a>.</li>
+    </ul>
+  </div>
+</aside>
 
-    const fly = new FlyControls(camera, renderer.domElement);
-    fly.movementSpeed=18; fly.rollSpeed=0.003; fly.dragToLook=true; let freeMode=false;
+<script>
+/* ========= UTIL: images (fast, reliable) ========= */
+const IMG = (file) => `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(file)}?width=1920`;
 
-    const hemi = new THREE.HemisphereLight(0xddddff, 0x101018, 0.65); scene.add(hemi);
-    const sun = new THREE.DirectionalLight(0xffffff, 1.2);
-    sun.position.set(80, 140, -50); sun.castShadow=true;
-    sun.shadow.mapSize.set(2048,2048);
-    sun.shadow.camera.near=0.5; sun.shadow.camera.far=800;
-    sun.shadow.camera.left=-200; sun.shadow.camera.right=200; sun.shadow.camera.top=200; sun.shadow.camera.bottom=-200;
-    scene.add(sun);
+/* ========= TOUR CONTENT (13 sections) ========= */
+const slides = [
+  {
+    title: "Piazza della Rotonda — First Glimpse",
+    img: IMG("Pantheon and fountain at night.JPG"),
+    para: "Night air, murmuring water, and the mass of the Pantheon ahead. The fountain and obelisk center the square while the temple-portico draws the eye inward.",
+    bullets: [
+      "Lines: vertical granite columns vs. the obelisk’s needle; the facade frames the view.",
+      "Color: warm lamp-light on cool stone; bronze shadows under the pediment.",
+      "Texture: weathered travertine and smooth granite; rippling water softens the scene.",
+      "Spatial flow: open piazza ➝ deep porch ➝ hidden rotunda — a deliberate reveal.",
+      "Composition: rectangle (portico) set before a circle (drum), a classical harmony."
+    ]
+  },
+  {
+    title: "The Facade and Inscription",
+    img: IMG("Rome Pantheon facade and Piazza della Rotonda.jpg"),
+    para: "The entablature proclaims M·AGRIPPA·L·F·COS·TERTIVM·FECIT. Hadrian rebuilt the structure but preserved Agrippa’s credit — a political bow to tradition.",
+    bullets: [
+      "Period style: High Imperial Roman; regional: Rome’s Campus Martius.",
+      "Order: eight monolithic Corinthian shafts across the front, more within.",
+      "Classification: architecture that fuses Greek orders with Roman engineering.",
+      "Later Baroque city-making: the piazza and fountain were reshaped centuries later."
+    ]
+  },
+  {
+    title: "Bronze Doors — Threshold to the Divine",
+    img: IMG("Pantheon (Rome) entrance door.jpg"),
+    para: "Bronze leaves swing open to a darker world. Crossing the threshold is a ritual: the city falls away; the rotunda hushes everything.",
+    bullets: [
+      "Medium: cast bronze for the doors; stone and concrete for the shell.",
+      "Technique: monumental metalwork on ancient pivots; precise, durable fittings.",
+      "Material sound: a low metallic thud; then silence and stone acoustics."
+    ]
+  },
+  {
+    title: "Entering the Rotunda",
+    img: IMG("Pantheon interior (45696759504).jpg"),
+    para: "A perfect interior: the height to the oculus equals the diameter of the floor. The room feels like a contained piece of sky lowered to human scale.",
+    bullets: [
+      "Form: a sphere implied inside a cylinder — pure geometry, legible at a glance.",
+      "Spatial attribute: continuous ambulatory ring with radiating niches.",
+      "Composition: paired columns articulate bays; colored marbles band the walls."
+    ]
+  },
+  {
+    title: "The Oculus — Light as Architecture",
+    img: IMG("Pantheon, Rome with oculus lighting (8404115660).jpg"),
+    para: "A circular eye opens to the heavens. Sunlight descends in a moving beam, marking time and sanctifying whichever surface it touches.",
+    bullets: [
+      "Coffers shrink toward the crown, lightening the dome and accelerating perspective.",
+      "Light acts like a slow sundial, aligning seasonally with the doorway at noon.",
+      "Content: a cosmological room — earth below, heavens above, ruler between."
+    ]
+  },
+  {
+    title: "Floor & Drains — Beautiful Problem-Solving",
+    img: IMG("Pantheon floor drainage.jpg"),
+    para: "Rain falls freely through the oculus; the floor’s gentle convexity and discreet drains carry it away. Utility is drafted into elegance.",
+    bullets: [
+      "Technique: graded slope, marble tessellation, nearly invisible outlets.",
+      "Design thinking: let nature in; answer it with engineering, not avoidance."
+    ]
+  },
+  {
+    title: "Materials & Making",
+    img: IMG("Pantheon (Rome) - Interior 03.jpg"),
+    para: "The palette is imperial: porphyry, giallo antico, pavonazzetto, and granite — quarried across the empire, assembled with precision in Rome.",
+    bullets: [
+      "Medium: Roman concrete in the dome; revetments of precious marbles.",
+      "Technique: aggregates lighten with height (travertine ➝ tufa ➝ pumice).",
+      "Formalist note: pattern and proportion organize color into ordered bands."
+    ]
+  },
+  {
+    title: "Dome Exterior — Mass and Lightness",
+    img: IMG("Pantheon dome.jpg"),
+    para: "Outside, the dome sits low and earth-colored, stepping subtly as it rises. The drum’s thickness hides relieving arches that take the thrust.",
+    bullets: [
+      "Structure: thick drum walls; hidden brick relieving vaults; weight tuned by mix.",
+      "Style: restrained exterior masks a radical interior space — Roman pragmatism."
+    ]
+  },
+  {
+    title: "Beam, Air, Weather",
+    img: IMG("Panteon oculus light.JPG"),
+    para: "Light, breeze, and even rain participate in the ritual of the room. On certain dates at noon the sun hovers at the entrance, theatrically greeting visitors.",
+    bullets: [
+      "Idea: heaven’s eye animates the interior; time becomes visible.",
+      "Audience effect: awe, orientation, and a changed sense of scale."
+    ]
+  },
+  {
+    title: "Temple to Church",
+    img: IMG("Pantheon interior (45696759504).jpg"),
+    para: "In 609 CE the building became Santa Maria ad Martyres. That change safeguarded it through the Middle Ages and redefined its meaning without erasing its past.",
+    bullets: [
+      "Content shift: from ‘all gods’ to Christian worship; continuity through reuse.",
+      "Legacy: survival by adaptation — liturgy under an ancient cosmic dome."
+    ]
+  },
+  {
+    title: "Raphael and the Kings",
+    img: IMG("The tomb of Raphael in the Pantheon in Rome, Italy (Ank_Kumar) 06.jpg"),
+    para: "Raphael rests here by choice. Nearby, Italy’s kings lie in state. Fame, nationhood, and antiquity share the same architectural breath.",
+    bullets: [
+      "Interesting story: Raphael’s epitaph imagines Nature fearing to die with him.",
+      "Meaning: the Pantheon became a civic and cultural shrine as well as sacred space."
+    ]
+  },
+  {
+    title: "Losses & Afterlives",
+    img: IMG("Pantheon (Rome) - Interior 03.jpg"),
+    para: "Bronze once sparkled in the portico’s coffers; later centuries stripped and repurposed it. Yet the core ideas — geometry, light, mass — endure untouched.",
+    bullets: [
+      "Style dialogue: classical fabric altered by Baroque urbanism and papal agendas.",
+      "Legacy: a model for domes from Brunelleschi to the U.S. Capitol."
+    ]
+  },
+  {
+    title: "Stepping Back Outside",
+    img: IMG("Rome Pantheon facade and Piazza della Rotonda.jpg"),
+    para: "We return to the square. The composition still works its spell: obelisk and fountain pull the public close; the porch invites; the rotunda keeps its secret.",
+    bullets: [
+      "Point of View: power expressed as calm perfection — Rome’s order made stone.",
+      "Takeaway: Form (line, color, texture, space, composition), Content, Style, Medium, Technique, POV, and Legacy all converge into a single, unforgettable place."
+    ]
+  }
+];
 
-    const ground = new THREE.Mesh(new THREE.PlaneGeometry(800,800), new THREE.MeshStandardMaterial({color:0x23252c,roughness:1}));
-    ground.rotation.x = -Math.PI/2; ground.position.y=-0.02; ground.receiveShadow=true; scene.add(ground);
+/* ========= RENDER ========= */
+const app = document.getElementById('app');
+const progressEl = document.getElementById('progress');
 
-    const pantheon = new THREE.Group(); scene.add(pantheon);
+function makeSlide(s, idx){
+  const el = document.createElement('section');
+  el.className = 'slide' + (idx===0?' active':'');
+  el.style.backgroundImage = `url("${s.img}")`;
 
-    // Try to load GLB; if not found -> build procedural fallback so it's never empty.
-    const tryUrls = ['pantheon.glb?v=1','assets/pantheon.glb?v=1'];
-    const loader = new GLTFLoader();
+  el.innerHTML = `
+    <div class="content">
+      <article class="card">
+        <h2 class="title">${s.title}</h2>
+        <p class="para">${s.para}</p>
+        ${s.bullets?.length ? `<ul class="bullets">${s.bullets.map(b=>`<li>${b}</li>`).join('')}</ul>` : ``}
+      </article>
+    </div>
+    <div class="foot"></div>
+  `;
+  return el;
+}
+slides.forEach((s,i)=> app.appendChild(makeSlide(s,i)));
 
-    let loadedUrl = null;
-    for (const u of tryUrls){
-      try{
-        const gltf = await loader.loadAsync(u);
-        pantheon.add(gltf.scene);
-        gltf.scene.traverse(o=>{ if(o.isMesh){ o.castShadow=true; o.receiveShadow=true; if(o.material) o.material.side = THREE.DoubleSide; } });
-        statusMsg('Model loaded: ' + u.replace('?v=1',''), true, false);
-        loadedUrl = u;
-        break;
-      }catch(e){
-        console.warn('Failed to load', u, e);
-      }
-    }
-    if(!loadedUrl){
-      statusMsg('Could not find pantheon.glb — showing built‑in fallback (upload pantheon.glb next to index.html)', false, true);
-      buildProceduralPantheon(pantheon);
-      toastMsg('Fallback model active', 3000);
-    }
+/* ========= STATE & NAV ========= */
+const slideEls = [...document.querySelectorAll('.slide')];
+let i = 0;
+const total = slideEls.length;
+const setProgress = ()=> progressEl.textContent = `${i+1} / ${total}`;
 
-    // Hotspots
-    const hotspots = [
-      { id:'facade',  p:new THREE.Vector3(0,14,-38),  cam:{pos:[0,10,-85], tgt:[0,12,0]}, html:`<h2>Exterior & Portico</h2><p>Monumental portico with Agrippa’s inscription. Present structure: Hadrian (c. 118–125 CE).</p>` },
-      { id:'entrance',p:new THREE.Vector3(0,6.5,-22), cam:{pos:[0,4,-6],  tgt:[0,6,6]},   html:`<h2>Entrance & Rotunda</h2><p>Beyond the bronze doors lies the circular nave. The floor drains rain from the oculus.</p>` },
-      { id:'dome',    p:new THREE.Vector3(0,2,0),     cam:{pos:[0,1.2,0.5],tgt:[0,16,0]},  html:`<h2>Dome & Oculus</h2><p>Diameter equals height (~43 m). Oculus ~9 m — only direct light source.</p>` },
-      { id:'raphael', p:new THREE.Vector3(-15,2.8,0), cam:{pos:[-6,2,0],   tgt:[-20,3,0]}, html:`<h2>Raphael’s Tomb</h2><p>Raphael (1483–1520) requested burial here; his tomb became a model for later interments.</p>` },
-      { id:'altar',   p:new THREE.Vector3(0,2.0,18),  cam:{pos:[0,1.6,10], tgt:[0,3,24]},  html:`<h2>High Altar</h2><p>Consecrated 609 CE as St. Mary and the Martyrs. Pentecost rose‑petal rite continues.</p>` },
-    ];
-    const raycaster = new THREE.Raycaster(); const mouse = new THREE.Vector2();
-    const markerMat = new THREE.MeshBasicMaterial({color:0xffc400});
-    const markers = new THREE.Group(); scene.add(markers);
-    hotspots.forEach(h=>{
-      const m = new THREE.Mesh(new THREE.SphereGeometry(0.7,16,12), markerMat);
-      m.position.copy(h.p); m.userData.id = h.id; markers.add(m);
-    });
+function go(n){
+  if(n<0||n>=total||n===i) return;
+  const cur = slideEls[i], next = slideEls[n];
+  cur.classList.remove('active'); cur.classList.add('exiting');
+  next.classList.add('entering','active');
+  // cleanup classes after animation
+  setTimeout(()=>{ cur.classList.remove('exiting'); next.classList.remove('entering'); }, 750);
+  i = n; setProgress();
+}
+function next(){ if(i<total-1) go(i+1); }
+function prev(){ if(i>0) go(i-1); }
 
-    renderer.domElement.addEventListener('click', (e)=>{
-      if(overlay.classList.contains('show')) return;
-      const r = renderer.domElement.getBoundingClientRect();
-      mouse.x = ((e.clientX - r.left)/r.width)*2 - 1;
-      mouse.y = -((e.clientY - r.top)/r.height)*2 + 1;
-      raycaster.setFromCamera(mouse, camera);
-      const hits = raycaster.intersectObjects(markers.children, false);
-      if(hits.length){
-        const id = hits[0].object.userData.id;
-        const h = hotspots.find(x=>x.id===id);
-        walkTo(h.cam.pos, h.cam.tgt, ()=>showInfo(h.html));
-      }
-    });
+document.getElementById('next').onclick = next;
+document.getElementById('prev').onclick = prev;
 
-    // Camera transitions & modes
-    let walking=false, t0=0, dur=1.5, fromPos=new THREE.Vector3(), toPos=new THREE.Vector3(), fromTgt=new THREE.Vector3(), toTgt=new THREE.Vector3();
-    function easeInOut(t){ return t<.5?2*t*t:-1+(4-2*t)*t; }
-    function walkTo(posArr, tgtArr, onArrive){
-      if(freeMode) toggleFree(false);
-      walking=true; t0=performance.now();
-      fromPos.copy(camera.position); fromTgt.copy(orbit.target);
-      toPos.set(posArr[0],posArr[1],posArr[2]); toTgt.set(tgtArr[0],tgtArr[1],tgtArr[2]);
-      arriveCb = onArrive || null;
-    }
-    let arriveCb=null;
-    function toggleFree(on){
-      freeMode=on;
-      if(on){ btnFree.textContent='Exit Free Bird’s-Eye'; orbit.enabled=false; }
-      else  { btnFree.textContent='Enter Free Bird’s-Eye'; orbit.enabled=true; }
-    }
-    btnFree.onclick=()=>toggleFree(!freeMode);
-    btnReset.onclick=()=>{ toggleFree(false); orbit.target.set(0,14,0); camera.position.set(0,12,-85); orbit.update(); };
-    btnOut.onclick = ()=>{ toggleFree(false); walkTo([0,10,-85],[0,12,0]); };
-    btnIn.onclick  = ()=>{ toggleFree(false); walkTo([0,4,-6],[0,6,6]); };
+document.addEventListener('keydown', (e)=>{
+  if(sourcesOpen) return; // lock nav while sources open
+  if(e.code==='Space'){ e.preventDefault(); next(); }
+  else if(e.code==='Backspace'){ e.preventDefault(); prev(); }
+  else if(e.code==='ArrowRight'){ next(); }
+  else if(e.code==='ArrowLeft'){ prev(); }
+});
 
-    // Animate
-    let last=performance.now();
-    function render(now){
-      const dt = Math.min(0.05, (now-last)/1000); last=now;
-      if(walking){
-        const t=Math.min(1,(now-t0)/(dur*1000)), k=easeInOut(t);
-        camera.position.lerpVectors(fromPos,toPos,k);
-        orbit.target.lerpVectors(fromTgt,toTgt,k);
-        if(t>=1){ walking=false; if(arriveCb){ arriveCb(); arriveCb=null; } }
-      }
-      if(freeMode) fly.update(dt); else orbit.update();
-      sun.position.x = Math.cos(now*0.00012)*120; sun.position.z = Math.sin(now*0.00012)*-80;
-      renderer.render(scene,camera);
-      requestAnimationFrame(render);
-    }
-    requestAnimationFrame(render);
+/* ========= HOME & AUDIO ========= */
+const begin = document.getElementById('begin');
+const home = document.getElementById('home');
+const appRoot = document.getElementById('app');
+const bgm = document.getElementById('bgm');
+const audioToggle = document.getElementById('audioToggle');
 
-    addEventListener('resize', ()=>{
-      camera.aspect = innerWidth/innerHeight; camera.updateProjectionMatrix();
-      renderer.setSize(innerWidth, innerHeight);
-    });
+begin.addEventListener('click', async ()=>{
+  home.style.display='none';
+  appRoot.style.display='block';
+  // attempt autoplay after user gesture
+  try { await bgm.play(); audioToggle.textContent='⏸︎ Music'; } catch(e){ audioToggle.textContent='▶︎ Music'; }
+});
+audioToggle.addEventListener('click', async ()=>{
+  if(bgm.paused){ await bgm.play(); audioToggle.textContent='⏸︎ Music'; }
+  else{ bgm.pause(); audioToggle.textContent='▶︎ Music'; }
+});
 
-    // --------- fallback procedural builder ---------
-    function buildProceduralPantheon(root){
-      const stone = new THREE.MeshStandardMaterial({ color: 0x9b978f, roughness: 0.85 });
-      const darker= new THREE.MeshStandardMaterial({ color: 0x6f6b64, roughness: 0.9 });
-      const rotundaR=22, rotundaH=22, domeR=22, oculusR=9/2;
+/* ========= SOURCES PANEL ========= */
+const sourcesBtn = document.getElementById('sourcesBtn');
+const sourcesPane = document.getElementById('sourcesPane');
+const closeSources = document.getElementById('closeSources');
+let sourcesOpen=false;
+sourcesBtn.onclick = ()=>{ sourcesPane.style.display='block'; sourcesOpen=true; };
+closeSources.onclick = ()=>{ sourcesPane.style.display='none'; sourcesOpen=false; };
 
-      const drum = new THREE.Mesh(new THREE.CylinderGeometry(rotundaR,rotundaR,rotundaH,64,1,true), stone);
-      drum.position.y = rotundaH/2; drum.castShadow=true; drum.receiveShadow=true; root.add(drum);
+/* ========= PRELOAD for speed & to avoid “black” slides ========= */
+const toPreload = slides.map(s=>s.img);
+toPreload.forEach(src => { const im = new Image(); im.src = src; });
 
-      const thetaStart = Math.asin(oculusR/domeR);
-      const dome = new THREE.Mesh(new THREE.SphereGeometry(domeR,96,64,0,Math.PI*2,thetaStart,Math.PI/2 - thetaStart), stone);
-      dome.position.y = rotundaH; dome.castShadow=true; dome.receiveShadow=true; root.add(dome);
-
-      const ring = new THREE.Mesh(new THREE.RingGeometry(oculusR*0.98, oculusR*1.06, 64), new THREE.MeshBasicMaterial({color:0xf6e6a8, side:THREE.DoubleSide}));
-      ring.rotation.x = Math.PI/2; ring.position.set(0, rotundaH + Math.sqrt(domeR*domeR - oculusR*oculusR), 0); root.add(ring);
-
-      const porticoDepth=12, porticoW=40;
-      const roof = new THREE.Mesh(new THREE.BoxGeometry(porticoW,1.2,porticoDepth), darker);
-      roof.position.set(0, rotundaH*0.5+4, -(rotundaR + porticoDepth/2 - 2));
-      roof.castShadow=true; roof.receiveShadow=true; root.add(roof);
-
-      const ped = new THREE.Mesh(new THREE.ConeGeometry(porticoW/2,8,3), stone);
-      ped.rotation.z = Math.PI; ped.rotation.y = Math.PI/2;
-      ped.position.set(0, roof.position.y+4.5, roof.position.z);
-      ped.castShadow=true; ped.receiveShadow=true; root.add(ped);
-
-      for(let i=0;i<3;i++){
-        const step = new THREE.Mesh(new THREE.BoxGeometry(porticoW+6-i*2,0.8,porticoDepth+10+i*2), new THREE.MeshStandardMaterial({color:0x4a4a4d,roughness:1}));
-        step.position.set(0,0.4+i*0.8, -(rotundaR + porticoDepth/2 + 6 + i*2));
-        step.receiveShadow=true; root.add(step);
-      }
-
-      const door = new THREE.Mesh(new THREE.BoxGeometry(7,12,1.2), new THREE.MeshStandardMaterial({color:0x222, roughness:0.95}));
-      door.position.set(0,6,-(rotundaR-0.6));
-      door.castShadow=true; door.receiveShadow=true; root.add(door);
-
-      function columnRow(zOff){
-        const cols=8, span=porticoW*0.82;
-        for(let i=0;i<cols;i++){
-          const x = -span/2 + i*(span/(cols-1));
-          const col = new THREE.Mesh(new THREE.CylinderGeometry(1.15,1.15,14,32), stone);
-          col.position.set(x,7, -(rotundaR + zOff)); col.castShadow=true; col.receiveShadow=true; root.add(col);
-          const base = new THREE.Mesh(new THREE.CylinderGeometry(1.4,1.4,0.6,32), darker);
-          base.position.set(x,0.3, -(rotundaR + zOff)); base.receiveShadow=true; root.add(base);
-          const cap  = new THREE.Mesh(new THREE.CylinderGeometry(1.4,1.4,0.6,32), darker);
-          cap.position.set(x,13.7, -(rotundaR + zOff)); cap.castShadow=true; cap.receiveShadow=true; root.add(cap);
-        }
-      }
-      columnRow(porticoDepth - 1.5);
-      columnRow(porticoDepth - 1.5 - 5.2);
-
-      const altar = new THREE.Mesh(new THREE.BoxGeometry(6,4,2), new THREE.MeshStandardMaterial({color:0x8c877e, roughness:.85}));
-      altar.position.set(0,2, rotundaR - 3);
-      altar.castShadow=true; altar.receiveShadow=true; root.add(altar);
-
-      for(let i=0;i<7;i++){
-        const ang=(i-3)*Math.PI/8, r=rotundaR-1.2;
-        const x=Math.sin(ang)*r, z=Math.cos(ang)*r;
-        const box=new THREE.Mesh(new THREE.BoxGeometry(4,6,1), darker);
-        box.position.set(x,4,z); box.lookAt(0,4,0); box.castShadow=true; box.receiveShadow=true; root.add(box);
-      }
-    }
-  </script>
+/* Initial progress */
+setProgress();
+</script>
 </body>
 </html>
+
