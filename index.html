@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Pantheon • Presenter+ Tour</title>
+<title>Pantheon • Refined Tour</title>
 
 <!-- Performance & fonts -->
 <link rel="preconnect" href="https://upload.wikimedia.org" crossorigin>
@@ -16,7 +16,7 @@
     --accent:#e15b5b; --accent2:#a63a3a;
     --panel:rgba(18,19,25,.86); --border:rgba(255,255,255,.12);
     --shadow:0 16px 52px rgba(0,0,0,.52);
-    --radius:18px; --panelw:min(600px,95vw); --maxw:1180px;
+    --radius:18px; --panelw:min(640px,95vw); --maxw:1180px;
     --glass:rgba(255,255,255,.06);
   }
   *{box-sizing:border-box}
@@ -24,7 +24,7 @@
   body{margin:0;background:var(--bg);color:var(--fg);font-family:"Cinzel",serif;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;overflow:hidden}
 
   /* Home */
-  #home{position:fixed;inset:0;display:grid;place-items:center;background:#000 url("https://commons.wikimedia.org/wiki/Special:FilePath/Pantheon_and_fountain_at_night.JPG?width=2560") center/cover no-repeat}
+  #home{position:fixed;inset:0;display:grid;place-items:center;background:#000 url("https://commons.wikimedia.org/wiki/Special:FilePath/Pantheon%20Blue%20Hour%20(52071461893).jpg?width=2560") center/cover no-repeat}
   .home-overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.3),rgba(0,0,0,.7))}
   .home-card{position:relative;z-index:2;max-width:var(--maxw);background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);padding:26px 26px 22px;text-align:center}
   .home-title{font-size:clamp(28px,4vw,56px);margin:0 0 6px;letter-spacing:.4px}
@@ -45,7 +45,7 @@
   .slide{position:absolute;inset:0;background:#000 center/cover no-repeat;opacity:0;pointer-events:none;transition:opacity .45s ease}
   .slide.active{opacity:1;pointer-events:auto}
   .slideBG{position:absolute;inset:0;background-size:cover;background-position:center;transform-origin:60% 60%}
-  /* Ken Burns effect when active */
+  /* Ken Burns */
   .slide.active .slideBG{animation:ken 18s ease-in-out forwards}
   @keyframes ken{0%{transform:scale(1) translate3d(0,0,0)} 100%{transform:scale(1.06) translate3d(0,-1.2%,0)}}
 
@@ -53,10 +53,9 @@
   .left{left:2.5%} .right{right:2.5%}
 
   .title{font-size:clamp(22px,3vw,32px);margin:0 0 8px;color:#f1e7d3}
-  .deck{margin:6px 2px 10px;line-height:1.65;font-size:clamp(15px,1.4vw,18px);opacity:.95}
+  .deck{margin:6px 2px 8px;line-height:1.65;font-size:clamp(15px,1.4vw,18px);opacity:.95}
   .bullets{margin:8px 6px 10px 18px;padding:0}
   .bullets li{margin:7px 0;line-height:1.5;font-size:clamp(15px,1.35vw,18px)}
-  /* Deep read collapsible */
   details{margin:8px 2px 0;border:1px solid var(--border);border-radius:12px;background:rgba(0,0,0,.28)}
   summary{cursor:pointer;list-style:none;padding:10px 14px;font-weight:600}
   summary::-webkit-details-marker{display:none}
@@ -75,7 +74,7 @@
 
   /* Sources overlay */
   #sourcesPane{position:fixed;inset:0;display:none;z-index:30;background:rgba(0,0,0,.88)}
-  .sources-wrap{max-width:min(1000px,92vw);margin:6vh auto;background:rgba(18,19,25,.96);border:1px solid var(--border);border-radius:18px;padding:22px 22px 10px;box-shadow:var(--shadow);height:88vh;overflow:auto}
+  .sources-wrap{max-width:min(1040px,92vw);margin:6vh auto;background:rgba(18,19,25,.96);border:1px solid var(--border);border-radius:18px;padding:22px 22px 10px;box-shadow:var(--shadow);height:88vh;overflow:auto}
   .sources-wrap h2{text-align:center;margin:4px 0 14px;color:#ffbebe}
   .sources-wrap ul{list-style:none;padding:0;margin:0}
   .sources-wrap li{margin:10px 0 16px;line-height:1.5}
@@ -141,306 +140,335 @@
     <h2 id="srcTitle">Sources Used — MLA</h2>
     <ul>
       <!-- Core references -->
-      <li>“Pantheon.” <em>Encyclopaedia Britannica</em>, 29 July 2025, <a href="https://www.britannica.com/topic/Pantheon-building-Rome-Italy">www.britannica.com/topic/Pantheon-building-Rome-Italy</a>. Accessed 13 Sept. 2025.</li>
-      <li>Harris, Beth, and Steven Zucker. “The Pantheon (Rome).” <em>Smarthistory</em>, <a href="https://smarthistory.org/the-pantheon/">smarthistory.org/the-pantheon/</a>. Accessed 13 Sept. 2025.</li>
-      <li>Hannah, Robert, and Giulio Magli. “The Role of the Sun in the Pantheon’s Design and Meaning.” <em>Numen</em>, vol. 58, no. 4, 2011, pp. 486–513. Preprint: arXiv, 2009, <a href="https://arxiv.org/abs/0910.0128">arxiv.org/abs/0910.0128</a>. Accessed 13 Sept. 2025.</li>
-      <li>“The Oculus of the Pantheon.” <em>PantheonRoma.com</em>, 24 Apr. 2025, <a href="https://www.pantheonroma.com/2025/04/24/the-oculus-of-the-pantheon/">pantheonroma.com/2025/04/24/the-oculus-of-the-pantheon/</a>. Accessed 13 Sept. 2025.</li>
-      <li>“The Pantheon.” <em>Turismo Roma</em>, <a href="https://www.turismoroma.it/en/places/pantheon">www.turismoroma.it/en/places/pantheon</a>. Accessed 13 Sept. 2025.</li>
-      <li>“Pantheon, Rome.” <em>Wikipedia</em>, 2025, <a href="https://en.wikipedia.org/wiki/Pantheon,_Rome">en.wikipedia.org/wiki/Pantheon,_Rome</a>. Accessed 13 Sept. 2025.</li>
-      <li>“Pantheon, Rome (Italy): History and Description.” <em>ArcheoRoma</em>, <a href="https://www.archeoroma.org/sites/pantheon/">www.archeoroma.org/sites/pantheon/</a>. Accessed 13 Sept. 2025.</li>
-      <li>Montambaux, Gilles. “How the Sun Illuminates the Pantheon.” 2024, <a href="https://gilles.montambaux.com/files/misc/How%20the%20sun%20illuminates%20the%20Pantheon.pdf">gilles.montambaux.com/files/misc/How%20the%20sun%20illuminates%20the%20Pantheon.pdf</a>. Accessed 13 Sept. 2025.</li>
+      <li>“Pantheon.” <em>Encyclopaedia Britannica</em>, 29 July 2025, <a href="https://www.britannica.com/topic/Pantheon-building-Rome-Italy">www.britannica.com/topic/Pantheon-building-Rome-Italy</a>. Accessed 14 Sept. 2025.</li>
+      <li>Harris, Beth, and Steven Zucker. “The Pantheon (Rome).” <em>Smarthistory</em>, <a href="https://smarthistory.org/the-pantheon/">smarthistory.org/the-pantheon/</a>. Accessed 14 Sept. 2025.</li>
+      <li>Hannah, Robert, and Giulio Magli. “The Role of the Sun in the Pantheon’s Design and Meaning.” <em>Numen</em>, vol. 58, no. 4, 2011, pp. 486–513. Preprint: arXiv, 2009, <a href="https://arxiv.org/abs/0910.0128">arxiv.org/abs/0910.0128</a>. Accessed 14 Sept. 2025.</li>
+      <li>Montambaux, Gilles. “How the Sun Illuminates the Pantheon.” 2024, <a href="https://gilles.montambaux.com/files/misc/How%20the%20sun%20illuminates%20the%20Pantheon.pdf">gilles.montambaux.com/files/misc/How%20the%20sun%20illuminates%20the%20Pantheon.pdf</a>. Accessed 14 Sept. 2025.</li>
+      <li>“The Pantheon.” <em>Turismo Roma</em>, <a href="https://www.turismoroma.it/en/places/pantheon">www.turismoroma.it/en/places/pantheon</a>. Accessed 14 Sept. 2025.</li>
+      <li>“Pantheon, Rome.” <em>Wikipedia</em>, <a href="https://en.wikipedia.org/wiki/Pantheon,_Rome">en.wikipedia.org/wiki/Pantheon,_Rome</a>. Accessed 14 Sept. 2025.</li>
+      <li>“Campus Martius.” <em>Wikipedia</em>, <a href="https://en.wikipedia.org/wiki/Campus_Martius">en.wikipedia.org/wiki/Campus_Martius</a>. Accessed 14 Sept. 2025.</li>
+      <li>“Mons Claudianus.” <em>Wikipedia</em>, <a href="https://en.wikipedia.org/wiki/Mons_Claudianus">en.wikipedia.org/wiki/Mons_Claudianus</a>. Accessed 14 Sept. 2025.</li>
+      <li>“Doors of the Roman Pantheon.” <em>Wikipedia</em>, <a href="https://en.wikipedia.org/wiki/Doors_of_the_Roman_Pantheon">en.wikipedia.org/wiki/Doors_of_the_Roman_Pantheon</a>. Accessed 14 Sept. 2025.</li>
 
       <!-- Video (construction animation) -->
-      <li>AncientVivid (creator). “Pantheon 3D 3.0.” <em>YouTube</em>, 12 Nov. 2016, <a href="https://www.youtube.com/watch?v=eBktmvegPjU">youtube.com/watch?v=eBktmvegPjU</a>. Accessed 13 Sept. 2025.</li>
+      <li>AncientVivid (creator). “Pantheon 3D 3.0.” <em>YouTube</em>, 12 Nov. 2016, <a href="https://www.youtube.com/watch?v=eBktmvegPjU">youtube.com/watch?v=eBktmvegPjU</a>. Accessed 14 Sept. 2025.</li>
 
       <!-- Images (Wikimedia Commons) -->
-      <li>Reusch, Pascal. <em>Pantheon and Fountain at Night</em>. <em>Wikimedia Commons</em>, <a href="https://commons.wikimedia.org/wiki/File:Pantheon_and_fountain_at_night.JPG">commons.wikimedia.org/wiki/File:Pantheon_and_fountain_at_night.JPG</a>. Accessed 13 Sept. 2025.</li>
-      <li>daniele_malavolta. <em>Rome Pantheon Facade and Piazza della Rotonda</em>. <em>Wikimedia Commons</em>, <a href="https://commons.wikimedia.org/wiki/File:Rome_Pantheon_facade_and_Piazza_della_Rotonda.jpg">commons.wikimedia.org/wiki/File:Rome_Pantheon_facade_and_Piazza_della_Rotonda.jpg</a>. Accessed 13 Sept. 2025.</li>
-      <li>Wknight94. <em>Pantheon (Rome) Entrance Door</em>. <em>Wikimedia Commons</em>, <a href="https://commons.wikimedia.org/wiki/File:Pantheon_(Rome)_entrance_door.jpg">commons.wikimedia.org/wiki/File:Pantheon_(Rome)_entrance_door.jpg</a>. Accessed 13 Sept. 2025.</li>
-      <li>Livioandronico2013. <em>Pantheon Interior</em>. <em>Wikimedia Commons</em>, <a href="https://commons.wikimedia.org/wiki/File:Pantheon_interior_(45696759504).jpg">commons.wikimedia.org/wiki/File:Pantheon_interior_(45696759504).jpg</a>. Accessed 13 Sept. 2025.</li>
-      <li>Sund, Sheila. <em>Pantheon, Rome with Oculus Lighting</em>. <em>Wikimedia Commons</em>, <a href="https://commons.wikimedia.org/wiki/File:Pantheon,_Rome_with_oculus_lighting_(8404115660).jpg">commons.wikimedia.org/wiki/File:Pantheon,_Rome_with_oculus_lighting_(8404115660).jpg</a>. Accessed 13 Sept. 2025.</li>
-      <li>Perfect Tommy. <em>Pantheon Floor Drainage</em>. <em>Wikimedia Commons</em>, <a href="https://commons.wikimedia.org/wiki/File:Pantheon_floor_drainage.jpg">commons.wikimedia.org/wiki/File:Pantheon_floor_drainage.jpg</a>. Accessed 13 Sept. 2025.</li>
-      <li>John Samuel. <em>Pantheon — Interior 03</em>. <em>Wikimedia Commons</em>, <a href="https://commons.wikimedia.org/wiki/File:Pantheon_(Rome)_-_Interior_03.jpg">commons.wikimedia.org/wiki/File:Pantheon_(Rome)_-_Interior_03.jpg</a>. Accessed 13 Sept. 2025.</li>
-      <li>Anthony M. <em>Pantheon Dome (Exterior)</em>. <em>Wikimedia Commons</em>, <a href="https://commons.wikimedia.org/wiki/File:Pantheon_dome.jpg">commons.wikimedia.org/wiki/File:Pantheon_dome.jpg</a>. Accessed 13 Sept. 2025.</li>
-      <li>Paolo Rosa. <em>Panteon Oculus Light</em>. <em>Wikimedia Commons</em>, <a href="https://commons.wikimedia.org/wiki/File:Panteon_oculus_light.JPG">commons.wikimedia.org/wiki/File:Panteon_oculus_light.JPG</a>. Accessed 13 Sept. 2025.</li>
-      <li>Ank Kumar. <em>The Tomb of Raphael in the Pantheon</em>. <em>Wikimedia Commons</em>, <a href="https://commons.wikimedia.org/wiki/File:The_tomb_of_Raphael_in_the_Pantheon_in_Rome,_Italy_(Ank_Kumar)_06.jpg">commons.wikimedia.org/wiki/File:The_tomb_of_Raphael_in_the_Pantheon_in_Rome,_Italy_(Ank_Kumar)_06.jpg</a>. Accessed 13 Sept. 2025.</li>
+      <li>“Pantheon Blue Hour (52071461893).jpg.” <em>Wikimedia Commons</em>, <a href="https://commons.wikimedia.org/wiki/File:Pantheon_Blue_Hour_(52071461893).jpg">commons.wikimedia.org/wiki/File:Pantheon_Blue_Hour_(52071461893).jpg</a>. Accessed 14 Sept. 2025.</li>
+      <li>“Pantheon Rome1.jpg.” <em>Wikimedia Commons</em>, <a href="https://commons.wikimedia.org/wiki/File:Pantheon_Rome1.jpg">commons.wikimedia.org/wiki/File:Pantheon_Rome1.jpg</a>. Accessed 14 Sept. 2025.</li>
+      <li>Wknight94. <em>Pantheon (Rome) Entrance Door</em>. <em>Wikimedia Commons</em>, <a href="https://commons.wikimedia.org/wiki/File:Pantheon_(Rome)_entrance_door.jpg">commons.wikimedia.org/wiki/File:Pantheon_(Rome)_entrance_door.jpg</a>. Accessed 14 Sept. 2025.</li>
+      <li>Mohammad Reza Domiri Ganji. <em>Rome-Pantheon.jpg</em>. <em>Wikimedia Commons</em>, <a href="https://commons.wikimedia.org/wiki/File:Rome-Pantheon.jpg">commons.wikimedia.org/wiki/File:Rome-Pantheon.jpg</a>. Accessed 14 Sept. 2025.</li>
+      <li>Sheila Sund. <em>Pantheon, Rome with Oculus Lighting (8404115660).jpg</em>. <em>Wikimedia Commons</em>, <a href="https://commons.wikimedia.org/wiki/File:Pantheon,_Rome_with_oculus_lighting_(8404115660).jpg">commons.wikimedia.org/wiki/File:Pantheon,_Rome_with_oculus_lighting_(8404115660).jpg</a>. Accessed 14 Sept. 2025.</li>
+      <li>Wknight94. <em>Pantheon Floor Drainage</em>. <em>Wikimedia Commons</em>, <a href="https://commons.wikimedia.org/wiki/File:Pantheon_floor_drainage.jpg">commons.wikimedia.org/wiki/File:Pantheon_floor_drainage.jpg</a>. Accessed 14 Sept. 2025.</li>
+      <li>Livioandronico2013. <em>Pantheon (Rome) — Dome Interior</em>. <em>Wikimedia Commons</em>, <a href="https://commons.wikimedia.org/wiki/File:Pantheon_(Rome)_-_Dome_interior.jpg">commons.wikimedia.org/wiki/File:Pantheon_(Rome)_-_Dome_interior.jpg</a>. Accessed 14 Sept. 2025.</li>
+      <li>Anthony M. <em>Pantheon Dome (Exterior)</em>. <em>Wikimedia Commons</em>, <a href="https://commons.wikimedia.org/wiki/File:Pantheon_dome.jpg">commons.wikimedia.org/wiki/File:Pantheon_dome.jpg</a>. Accessed 14 Sept. 2025.</li>
+      <li>“Pantheon Oculus Sun.JPG.” <em>Wikimedia Commons</em>, <a href="https://commons.wikimedia.org/wiki/File:Pantheon_Oculus_Sun.JPG">commons.wikimedia.org/wiki/File:Pantheon_Oculus_Sun.JPG</a>. Accessed 14 Sept. 2025.</li>
+      <li>“Dehio 1 Pantheon Floor plan.jpg.” <em>Wikimedia Commons</em>, <a href="https://commons.wikimedia.org/wiki/File:Dehio_1_Pantheon_Floor_plan.jpg">commons.wikimedia.org/wiki/File:Dehio_1_Pantheon_Floor_plan.jpg</a>. Accessed 14 Sept. 2025.</li>
+      <li>Joris1919 (ed.). <em>Plan Rome- Pantheon.png</em>. <em>Wikimedia Commons</em>, <a href="https://commons.wikimedia.org/wiki/File:Plan_Rome-_Pantheon.png">commons.wikimedia.org/wiki/File:Plan_Rome-_Pantheon.png</a>. Accessed 14 Sept. 2025.</li>
+      <li>“Pantheon, Roma, LZ, IT.jpg.” <em>Wikimedia Commons</em>, <a href="https://commons.wikimedia.org/wiki/File:Pantheon,_Roma,_LZ,_IT.jpg">commons.wikimedia.org/wiki/File:Pantheon,_Roma,_LZ,_IT.jpg</a>. Accessed 14 Sept. 2025.</li>
+      <li>Jastrow. <em>High Altar Pantheon Rome</em>. <em>Wikimedia Commons</em>, <a href="https://commons.wikimedia.org/wiki/File:High_altar_Pantheon_Rome.jpg">commons.wikimedia.org/wiki/File:High_altar_Pantheon_Rome.jpg</a>. Accessed 14 Sept. 2025.</li>
+      <li>Ank Kumar. <em>The Tomb of Raphael in the Pantheon</em>. <em>Wikimedia Commons</em>, <a href="https://commons.wikimedia.org/wiki/File:The_tomb_of_Raphael_in_the_Pantheon_in_Rome,_Italy_(Ank_Kumar)_06.jpg">commons.wikimedia.org/wiki/File:The_tomb_of_Raphael_in_the_Pantheon_in_Rome,_Italy_(Ank_Kumar)_06.jpg</a>. Accessed 14 Sept. 2025.</li>
+      <li>“Pantheon interior (32547903128).jpg.” <em>Wikimedia Commons</em>, <a href="https://commons.wikimedia.org/wiki/File:Pantheon_interior_(32547903128).jpg">commons.wikimedia.org/wiki/File:Pantheon_interior_(32547903128).jpg</a>. Accessed 14 Sept. 2025.</li>
+      <li>“Pantheon Piazza Della Rotonda (257357271).jpeg.” <em>Wikimedia Commons</em>, <a href="https://commons.wikimedia.org/wiki/File:Pantheon_Piazza_Della_Rotonda_(257357271).jpeg">commons.wikimedia.org/wiki/File:Pantheon_Piazza_Della_Rotonda_(257357271).jpeg</a>. Accessed 14 Sept. 2025.</li>
 
       <!-- Audio -->
-      <li>United States Air Force Band. “The Washington Post — Ceremonial Brass.” <em>Wikimedia Commons</em>, <a href="https://commons.wikimedia.org/wiki/File:The_Washington_Post_-_Ceremonial_Brass_-_United_States_Air_Force_Band.mp3">commons.wikimedia.org/wiki/File:The_Washington_Post_-_Ceremonial_Brass_-_United_States_Air_Force_Band.mp3</a>. Accessed 13 Sept. 2025.</li>
+      <li>United States Air Force Band. “The Washington Post — Ceremonial Brass.” <em>Wikimedia Commons</em>, <a href="https://commons.wikimedia.org/wiki/File:The_Washington_Post_-_Ceremonial_Brass_-_United_States_Air_Force_Band.mp3">commons.wikimedia.org/wiki/File:The_Washington_Post_-_Ceremonial_Brass_-_United_States_Air_Force_Band.mp3</a>. Accessed 14 Sept. 2025.</li>
     </ul>
   </div>
 </aside>
 
 <script>
-/* ========= Utilities ========= */
+/* ===== Utilities ===== */
 const IMG = f => `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(f)}?width=2560`;
 const el = (tag, cls, html) => { const n=document.createElement(tag); if(cls) n.className=cls; if(html!==undefined) n.innerHTML=html; return n; };
 
-/* ========= Presenter-friendly slides =========
-   - bullets: short, speakable points you can riff from
-   - deck: quick summary
-   - deep: longer paragraph(s) under a collapsible “Read more”
+/* 
+Slides align with your slideshow prompts:
+- FORM (shape/line/color/space/composition)
+- CONTENT/MEANING (what it says/does)
+- STYLE (Greek vs. Roman, period/regional traits)
+- MEDIUM (materials)
+- TECHNIQUE (how it was made)
+- CREATOR POV (imperial messaging, audience)
+- LEGACY/STORY (what came after; good anecdote)
+We cover those in bullet sentences—no labels shown on-screen.
 */
 const slides = [
-  /* 1 — PROLOGUE with construction-style animation (YouTube, muted) */
+  /* 1 — PROLOGUE: construction-style animation (YouTube, muted) */
   {
     type:"youtube",
     youtubeId:"eBktmvegPjU",
     side:"right",
     title:"Prologue — ‘Pantheon’: All Gods, All Empire",
-    deck:"Greek words, Roman intent. A temple face outside, a concrete sky inside.",
+    deck:"Greek name, Roman ambition. A temple front outside, a concrete sky inside.",
     bullets:[
-      "Name means “all gods.”",
-      "Hadrian’s rebuild (c. 118–128 CE).",
-      "Agrippa kept on the front.",
-      "Greek look; Roman engineering.",
-      "Purpose debated: many gods & empire."
+      "Name means “all gods,” yet the room also honors power on earth.",
+      "Current build is Hadrian’s era; Agrippa’s name stays on the front.",
+      "Greek look frames a new Roman kind of space.",
+      "Concrete lets the interior act like a measured sky.",
+      "Meaning sits in the experience: light, scale, and time."
     ],
-    deep:`<p>The word comes from <em>pan</em> (all) + <em>theoi</em> (gods). The current building is Hadrianic yet preserves Agrippa’s Augustan inscription, tying past glory to present power. The portico speaks fluent Greek—Corinthian columns and pediment—while the rotunda declares Roman innovation with brick-faced concrete and a world-scale interior. Scholars debate the exact ritual function, but the space reads as a cosmic room that dignifies empire, gods, and ruler alike.</p>`
+    deep:`<p>From <em>pan</em> (all) + <em>theoi</em> (gods), the monument blends traditional worship with imperial messaging. The front keeps Agrippa’s Augustan credit; the rotunda behind it is Hadrianic. The facade uses Greek language (columns, pediment); the interior speaks Roman concrete and geometry, turning light and proportion into the main content.</p>`
   },
 
-  { /* 2 */
-    title:"Piazza della Rotonda — Processional Approach",
-    img:IMG("Pantheon_and_fountain_at_night.JPG"),
+  /* 2 — Approach / Piazza */
+  {
+    title:"Processional Approach — Piazza della Rotonda",
+    img:IMG("Pantheon Blue Hour (52071461893).jpg"),
     side:"left",
-    deck:"Square, fountain, obelisk, porch—Rome sets the stage before the reveal.",
+    deck:"Square, fountain, obelisk, and porch set up the reveal.",
     bullets:[
-      "Open piazza, then deep porch.",
-      "Obelisk + fountain center the view.",
-      "Columns pull you inward.",
-      "Rectangle outside, circle inside.",
-      "City theater for an ancient star."
+      "Open piazza gathers a crowd before the deep porch.",
+      "Axis centers on the portico; lines pull the eye inward.",
+      "Cool stone, water, and shadow stage the first pause.",
+      "Rectangle outdoors…then circle within.",
+      "The city acts like a theater for the entrance."
     ],
-    deep:`<p>The entrance is a civic performance: the piazza collects people, the fountain and obelisk pin the axis, and the porch frames what’s to come. The architectural plot is deliberate—rectilinear order outdoors, then a concealed rotunda that overturns expectations. This “processional reveal” is part of the building’s meaning.</p>`
+    deep:`<p>The approach is choreography. The piazza collects people; the fountain and obelisk align sightlines; the porch compresses scale. The quick switch—from street grid to spherical interior—creates content without words.</p>`
   },
 
-  { /* 3 */
-    title:"Portico & Inscription — Augustus Remembered",
-    img:IMG("Rome_Pantheon_facade_and_Piazza_della_Rotonda.jpg"),
+  /* 3 — Inscription / Portico */
+  {
+    title:"Front & Inscription — Old Credit, New Build",
+    img:IMG("Pantheon Rome1.jpg"),
     side:"right",
-    deck:"The front says “Agrippa made this,” long after Hadrian rebuilt it.",
+    deck:"Agrippa is carved on the front; Hadrian’s team rebuilt the whole.",
     bullets:[
-      "Inscription: M·AGRIPPA…FECIT.",
-      "16 granite monoliths (Egypt).",
-      "Greek temple look on purpose.",
-      "Old credit, new structure.",
-      "Empire’s reach on display."
+      "Grey and pink granite columns show long-distance sourcing.",
+      "Lettering in monumental capitals sets tone and authority.",
+      "Temple front reads Greek; the plan behind is Roman.",
+      "Color: warm stone vs. shadowed porch for contrast.",
+      "Audience reads continuity even as design changes inside."
     ],
-    deep:`<p>The facade keeps Agrippa’s line to honor Augustan memory. Granite columns came from Egypt along imperial sea lanes; logistics are part of the message. The Greek temple front is a ritual mask: behind it waits an interior Romans invented—an inhabitable hemisphere.</p>`
+    deep:`<p>The famous line—M·AGRIPPA·L·F·COS·TERTIVM·FECIT—anchors memory. Monolithic shafts from Egyptian quarries tell a story about empire and logistics. The classical look signals piety; the rebuild transforms the experience behind it.</p>`
   },
 
-  { /* 4 */
-    title:"Bronze Doors — Crossing into Shadow",
-    img:IMG("Pantheon_(Rome)_entrance_door.jpg"),
+  /* 4 — Bronze Doors / Threshold */
+  {
+    title:"Bronze Doors — Crossing the Threshold",
+    img:IMG("Pantheon (Rome) entrance door.jpg"),
     side:"left",
-    deck:"Metal leaves open; the city fades. Inside is cool, dark, and vast.",
+    deck:"Metal leaves swing open; air and sound change instantly.",
     bullets:[
-      "Ancient bronze in use.",
-      "Threshold = mood shift.",
-      "Sound softens; light dims.",
-      "Craft + endurance.",
-      "Stage set for the dome."
+      "Bronze leaves pivot on floor and lintel pins.",
+      "Crossing quiets street noise; the room feels cooler.",
+      "Lines of the panels echo the coffer rhythm ahead.",
+      "Craft and weight announce importance without words.",
+      "The opening frames the oculus like a staged view."
     ],
-    deep:`<p>Bronze carpentry on a monumental scale marks the boundary between ordinary streets and sacred geometry. Ancient pivots, careful hinges, and a deep porch make the crossing feel ceremonial—an engineered change of atmosphere before the big reveal.</p>`
+    deep:`<p>Ancient bronze carpentry survives here at monumental scale. The door’s panels, proportions, and movement prepare the eye for the geometry inside. The threshold is a designed mood change—part ritual, part engineering.</p>`
   },
 
-  { /* 5 */
-    title:"Interior Geometry — A 43.3 m Sphere",
-    img:IMG("Pantheon_interior_(45696759504).jpg"),
+  /* 5 — Interior Geometry */
+  {
+    title:"Interior Geometry — The 43.3 m Sphere",
+    img:IMG("Rome-Pantheon.jpg"),
     side:"right",
-    deck:"Height equals width. A perfect sphere seems to rest inside the walls.",
+    deck:"Height equals width, so a sphere seems to sit inside the drum.",
     bullets:[
-      "43.3 m high and wide.",
-      "Seven bays ring the room.",
-      "Marble bands organize color.",
-      "Quiet, balanced acoustics.",
-      "Human scale meets cosmic scale."
+      "Seven bays ring the room in a clear rhythm.",
+      "Banded marbles organize color and texture at eye level.",
+      "The oculus crowns a calm, balanced composition.",
+      "Scale feels grand but readable from human height.",
+      "Meaning grows from proportion more than decoration."
     ],
-    deep:`<p>The rotunda’s height to the oculus matches the floor’s diameter, implying a full sphere. Colored marbles and paired columns articulate seven bays, establishing order without crushing the sense of vastness. The room is mathematical yet humane—political theater done with geometry.</p>`
+    deep:`<p>The circle’s diameter matches the height to the oculus, implying a full sphere. Pairs of columns and entablatures sort the wall into seven bays; colored marbles give order and warmth. The geometry produces quiet speech: centered, legible, and dignified.</p>`
   },
 
-  { /* 6 */
-    title:"Oculus & Sunbeam — Time Made Visible",
-    img:IMG("Pantheon,_Rome_with_oculus_lighting_(8404115660).jpg"),
+  /* 6 — Oculus / Sunbeam */
+  {
+    title:"Oculus & Sunbeam — Time You Can See",
+    img:IMG("Pantheon, Rome with oculus lighting (8404115660).jpg"),
     side:"left",
-    deck:"A ~9 m eye to the sky. The sun paints a moving spotlight each day.",
+    deck:"A ~9 m eye to the sky draws a moving spotlight across the room.",
     bullets:[
-      "Only true window is the sky.",
-      "Coffers lighten and guide the eye.",
-      "Beam shifts with the seasons.",
-      "Rain and light both belong here.",
-      "Rituals timed with sunlight."
+      "The beam lands differently as seasons turn.",
+      "Coffers step toward the crown and cut weight.",
+      "Rain and sunlight are part of the design, not a flaw.",
+      "Shadows carve hours on the interior surface.",
+      "Key days likely used the beam for ceremony."
     ],
-    deep:`<p>The oculus admits sun, stars, and weather. Five rings of coffers reduce weight and steepen perspective toward the crown. Scholars have mapped the sunbeam’s movement across the interior, noting seasonal effects and possible ceremonial alignments. Light isn’t decoration—it’s a building material.</p>`
+    deep:`<p>Five rings of coffers lighten the shell and speed the eye to the center. The oculus admits sun, stars, air—and rain. Scholars track how the beam travels across the doorway and niches through the year; the timing adds another layer of meaning to the space.</p>`
   },
 
-  { /* 7 */
-    title:"Floor & Hydraulics — Let the Rain In",
-    img:IMG("Pantheon_floor_drainage.jpg"),
+  /* 7 — Floor / Hydraulics */
+  {
+    title:"Floor & Drains — Let It Rain",
+    img:IMG("Pantheon floor drainage.jpg"),
     side:"right",
-    deck:"Rain falls through the oculus; a subtle slope and drains whisk it away.",
+    deck:"Water falls through the oculus; the floor quietly handles it.",
     bullets:[
-      "Slightly convex pavement.",
-      "~22 discreet drains.",
-      "Circles + squares underfoot.",
-      "Design answers nature.",
-      "No puddles, no problem."
+      "Surface is slightly convex to guide flow.",
+      "Discreet drains ring the center (no puddles).",
+      "Squares and circles pattern the pavement.",
+      "Stone choice balances grip, polish, and color.",
+      "Nature arrives; engineering hosts it."
     ],
-    deep:`<p>The floor is engineered like a shallow dome. Geometric marble patterns disguise a fine slope that guides water to hidden outlets. Rather than exclude rain, the design choreographs it—form and function reinforce each other.</p>`
+    deep:`<p>The pavement acts like a shallow dome in reverse. Marble geometry disguises a fine slope toward small outlets. The material palette is picked for both visual order and safe footing in wet conditions.</p>`
   },
 
-  { /* 8 */
-    title:"Concrete Alchemy — Grading the Mix",
-    img:IMG("Pantheon_(Rome)_-_Interior_03.jpg"),
+  /* 8 — Concrete / Structure */
+  {
+    title:"Concrete Alchemy — Lighter as You Rise",
+    img:IMG("Pantheon (Rome) - Dome interior.jpg"),
     side:"left",
-    deck:"Heavy below, lighter above. Concrete changes as stresses change.",
+    deck:"Mix gets lighter toward the crown; shape carries the thrust.",
     bullets:[
-      "Travertine ➝ tufa ➝ pumice.",
-      "Walls ~6 m thick at base.",
-      "Relieving arches inside the drum.",
-      "Coffers cut weight.",
-      "Science in every course."
+      "Dense aggregates below, pumice-rich above.",
+      "Relieving arches in the drum redirect forces.",
+      "Coffers remove mass without losing strength.",
+      "Thick base thins toward the oculus.",
+      "Know-how is the real ornament here."
     ],
-    deep:`<p>Roman builders tuned aggregates by height: dense mixes near the springing, lighter, pumice-rich mixes near the crown. The drum hides brick relieving arches that redirect thrust into piers. Coffers remove mass without losing stiffness. It’s material engineering centuries ahead of its time.</p>`
+    deep:`<p>Roman builders tuned aggregates—travertine and tile fragments low, then tufa and pumice high—to match stresses. Brick-faced concrete and hidden arches channel loads into piers. The shell’s thinning section and coffer grid make a massive span possible.</p>`
   },
 
-  { /* 9 */
-    title:"Exterior Dome — Mass and Modesty",
-    img:IMG("Pantheon_dome.jpg"),
+  /* 9 — Exterior Dome / Mass */
+  {
+    title:"Exterior Dome — Quiet Outside, Cosmic Inside",
+    img:IMG("Pantheon dome.jpg"),
     side:"right",
-    deck:"Outside it looks low and earthy. Inside it becomes the heavens.",
+    deck:"Low silhouette outdoors; celestial vault when you step in.",
     bullets:[
-      "Unreinforced concrete record.",
-      "Thickness tapers upward.",
-      "Oculus relieves the crown.",
-      "Drum catches the thrust.",
-      "Power without bragging outside."
+      "Profile underplays the drama from the street.",
+      "Oculus relieves the crown where stress is highest.",
+      "Drum and buttressing catch outward push.",
+      "Weathering reads as honest age, not dress-up.",
+      "Restraint protects the surprise within."
     ],
-    deep:`<p>The outer silhouette downplays drama; the shell’s real theater is within. Structural logic rules: thickness decreases toward the oculus, and the drum handles outward push. The restraint outside protects the surprise inside.</p>`
+    deep:`<p>The shell’s logic is visible in section: thickness tapers up; the oculus both lights and lightens. The modest exterior makes the interior revelation stronger.</p>`
   },
 
-  { /* 10 */
+  /* 10 — Air / Ritual */
+  {
     title:"Air, Weather, and Ritual Time",
-    img:IMG("Panteon_oculus_light.JPG"),
+    img:IMG("Pantheon Oculus Sun.JPG"),
     side:"left",
-    deck:"Breeze, rain, and sunlight animate the room. Time is visible here.",
+    deck:"Breeze, rain, and light make a daily performance.",
     bullets:[
-      "Daily beam = living clock.",
-      "Feast-day petals from above.",
-      "Breathable, open crown.",
-      "Shadows mark the hours.",
-      "Nature as co-designer."
+      "The beam marks noon like a reverse sundial.",
+      "Rose petals fall through the crown on feast days.",
+      "Ventilation works even when doors are closed.",
+      "Shifting light rewrites color on the marbles.",
+      "Time is part of the content here."
     ],
-    deep:`<p>The oculus lets the climate into the ritual. Noon light greets entrants; petals fall through the opening on feast days. The building is a slow-moving performance of light and air—renewed every hour.</p>`
+    deep:`<p>The oculus keeps the interior alive. On special days, petals descend from the opening; daily, the sun walks the wall. The building teaches time by showing it.</p>`
   },
 
-  { /* 11 */
-    title:"Who Designed It? — The Team Question",
-    img:IMG("Pantheon_(Rome)_-_Interior_03.jpg"),
+  /* 11 — Who made it? / Teamwork */
+  {
+    title:"Who Designed It? — Imperial Teamwork",
+    img:IMG("Dehio 1 Pantheon Floor plan.jpg"),
     side:"right",
-    deck:"Texts are thin. Likely a Hadrian-era team; authorship stays debated.",
+    deck:"Texts are thin; evidence points to a Hadrian-era team.",
     bullets:[
-      "Agrippa on front; Hadrianic build.",
-      "Apollodorus story is uncertain.",
-      "Brick stamps help date phases.",
-      "Design feels collaborative.",
-      "Debate keeps scholars busy."
+      "Agrippa’s name remains; rebuilding is Hadrianic.",
+      "Brick stamps help date phases of work.",
+      "Apollodorus appears in anecdotes, uncertain link.",
+      "Standardized parts + skilled crews fit the puzzle.",
+      "Audience: citizens, elites, visitors—everyone reads the message."
     ],
-    deep:`<p>Ancient authors don’t pin a single architect. Later anecdotes mention Apollodorus, but evidence is shaky. Brick stamps and construction analysis point to a Hadrianic program executed by expert teams—imperial building was rarely a one-person show.</p>`
+    deep:`<p>Ancient authors don’t name a single architect. Construction analysis points to an imperial workshop, where planners, engineers, and guilds coordinated materials and form. The plan’s clarity and the shell’s math feel like collective expertise.</p>`
   },
 
-  { /* 12 */
-    title:"Campus Martius — Sun, State, City",
-    img:IMG("Pantheon_interior_(45696759504).jpg"),
+  /* 12 — Setting / Campus Martius */
+  {
+    title:"Campus Martius — City and Sun",
+    img:IMG("Plan Rome- Pantheon.png"),
     side:"left",
-    deck:"Near Augustan monuments on a floodplain. Place adds meaning.",
+    deck:"Near Augustan monuments; place adds meaning to the light show.",
     bullets:[
-      "Close to Ara Pacis & Mausoleum.",
-      "Horologium once tracked the sun.",
-      "Floodplain shaped foundations.",
-      "Processions tied city to cosmos.",
-      "Setting amplifies the message."
+      "Close to Ara Pacis and the Augustan Mausoleum.",
+      "Solar monuments once stood in the neighborhood.",
+      "Floodplain conditions shaped foundations.",
+      "Processions linked civic time and cosmic time.",
+      "The site turns architecture into public ritual."
     ],
-    deep:`<p>The site sits among Augustan showpieces: altar of peace, solar obelisk, dynastic tomb. That neighborhood composes a political landscape. The Pantheon’s beam and doorway theatrics likely spoke to civic time and imperial order in a city that staged its own mythology.</p>`
+    deep:`<p>The neighborhood matters. Augustan works around the field of Mars formed a landscape about time and rule. The Pantheon joins that conversation, using its doorway and beam to bind city rhythms to the sky.</p>`
   },
 
-  { /* 13 */
+  /* 13 — Materials / Logistics */
+  {
     title:"Empire in Motion — Quarries, Ships, Labor",
-    img:IMG("Rome_Pantheon_facade_and_Piazza_della_Rotonda.jpg"),
+    img:IMG("Pantheon, Roma, LZ, IT.jpg"),
     side:"right",
-    deck:"Stones from Egypt and beyond. Rome’s supply lines built this room.",
+    deck:"Stones from Egypt, marbles from across the sea, organized crews.",
     bullets:[
-      "Granite monoliths via Nile & sea.",
-      "Porphyry, giallo antico, pavonazzetto.",
-      "Skilled guilds and centering.",
-      "Standardized bricks, smart logistics.",
-      "Empire shown in materials."
+      "Granite shafts came by Nile, sea, and Tiber.",
+      "Porphyry, pavonazzetto, giallo antico color the walls.",
+      "Timber centering and forms guided each pour.",
+      "Standard bricks speed up the schedule.",
+      "Materials themselves tell a story of reach."
     ],
-    deep:`<p>Granites came from Aswan and Mons Claudianus; colored marbles from across the Mediterranean. Standardized bricks, trained crews, and careful timber centering made the pour possible. The materials themselves tell a story of reach and control.</p>`
+    deep:`<p>Columns were quarried at Mons Claudianus; colored stones arrived from around the Mediterranean. Crews raised centering, placed coffers, and tuned mixes by height. Logistics and craft are as impressive as the final look.</p>`
   },
 
-  { /* 14 */
+  /* 14 — Conversion / Church */
+  {
     title:"609 CE — Temple to Church",
-    img:IMG("Pantheon_interior_(45696759504).jpg"),
+    img:IMG("High altar Pantheon Rome.jpg"),
     side:"left",
-    deck:"Consecrated to St. Mary of the Martyrs. Use kept it alive.",
+    deck:"Consecrated as Santa Maria ad Martyres; use kept it whole.",
     bullets:[
-      "Relics installed; altars added.",
-      "Processions replace sacrifices.",
-      "Continuous care = survival.",
-      "Pagan shell, new prayers.",
-      "Same wonder, new meanings."
+      "Relics and altars layered new meaning onto old space.",
+      "Processions replaced sacrifices; the room stayed the stage.",
+      "Regular care preserved structure and finishes.",
+      "Old geometry proved adaptable to new rites.",
+      "Continuity is the real guardian here."
     ],
-    deep:`<p>Conversion in 609 CE protected the building through unstable centuries. Liturgy adapted the space without demolishing it. Continuous use meant continuous maintenance, so the ancient shell remained whole while many other temples fell.</p>`
+    deep:`<p>Conversion protected the building in troubled centuries. The new liturgy fit the old geometry; maintenance followed worship. That continuity explains why this shell outlived peers.</p>`
   },
 
-  { /* 15 */
+  /* 15 — Raphael / Modern Memory */
+  {
     title:"Raphael & the Modern Kings — Memory in Stone",
     img:IMG("The_tomb_of_Raphael_in_the_Pantheon_in_Rome,_Italy_(Ank_Kumar)_06.jpg"),
     side:"right",
-    deck:"Artists and rulers chose this dome for rest. Fame meets nationhood.",
+    deck:"Artists and rulers chose this place for rest and honor.",
     bullets:[
-      "Raphael’s chosen burial.",
-      "Epitaph praises him beyond nature.",
-      "Italian kings nearby.",
-      "Art + state under one roof.",
-      "The past crowns the present."
+      "Raphael asked for burial under the dome.",
+      "Epitaph casts him as nature’s rival.",
+      "Italian kings anchor national story here.",
+      "Art, state, and faith share one room.",
+      "Past prestige powers modern identity."
     ],
-    deep:`<p>Raphael asked to lie under this dome; later, modern Italy’s kings joined him. The Pantheon became a shrine where art, faith, and national identity converge. Memory gathers power in a room designed to feel eternal.</p>`
+    deep:`<p>The Pantheon became a shrine of culture and nation. Raphael’s tomb draws artists; royal burials tie the monument to civic life. Memory gathers strength under a well-judged dome.</p>`
   },
 
-  { /* 16 */
-    title:"Spolia, Losses, and Influence",
-    img:IMG("Pantheon_(Rome)_-_Interior_03.jpg"),
+  /* 16 — Spolia / Influence */
+  {
+    title:"Spolia, Losses, and Wide Influence",
+    img:IMG("Pantheon interior (32547903128).jpg"),
     side:"left",
-    deck:"Bronze stripped, ideas endure. The model spreads worldwide.",
+    deck:"Bronze was stripped; the idea spread worldwide.",
     bullets:[
-      "Barberini era removed bronze.",
-      "Saying: barbarians vs. Barberini.",
-      "Inspires Brunelleschi & more.",
-      "Portico + dome copied often.",
-      "Form outlives materials."
+      "Portico metalwork saw reuse in later projects.",
+      "The famous quip blames Barberini more than barbarians.",
+      "Design echoes in capitols and rotundas across the globe.",
+      "Portico + dome became a teaching model.",
+      "Form outlasted materials."
     ],
-    deep:`<p>Bronze once glittered; later regimes repurposed it for cannons and churches. The setback didn’t touch the core ideas—geometry, light, mass. From Florence to Washington, D.C., the portico-and-dome blueprint echoes across centuries.</p>`
+    deep:`<p>Later regimes mined bronze from the porch, yet the essential form remained. From Brunelleschi to Neoclassical capitols, the blueprint—temple front outside, rotunda within—kept traveling.</p>`
   },
 
-  { /* 17 */
+  /* 17 — Final Overview */
+  {
     title:"Final Overview — A Living Cosmos in Stone",
-    img:IMG("Rome_Pantheon_facade_and_Piazza_della_Rotonda.jpg"),
+    img:IMG("Pantheon Piazza Della Rotonda (257357271).jpeg"),
     side:"right",
     deck:"Greek face, Roman mind. A measured sky you can enter.",
     bullets:[
-      "Outside: calm order; inside: surprise.",
-      "Light, water, and air perform daily.",
-      "Materials show empire’s reach.",
-      "Engineering shapes experience.",
-      "Meaning keeps renewing itself."
+      "Outside calms; inside surprises.",
+      "Light, water, and air are part of the script.",
+      "Materials trace empire-wide supply lines.",
+      "Engineering shapes feeling and meaning.",
+      "The room keeps earning new stories."
     ],
-    deep:`<p>A Greek temple front meets a Roman concrete sphere to produce a room where the world feels measured and hospitable. Sunlight tracks across marbles; rain is welcomed and guided; sound hushes; processions become stories. Stones speak of faraway quarries, supply chains, and skilled hands. The monument’s meaning adapts—from many gods to Christian worship to national memory—without losing the awe built into its geometry.</p>`
+    deep:`<p>A classical front masks a concrete cosmos. Sun tracks the wall, rain is welcomed and guided, sound hushes. Stones from far quarries and skilled labor make order feel effortless. Meaning has changed—from many gods to Christian rites to modern memory—but the geometry keeps working.</p>`
   }
 ];
 
-/* ========= Render ========= */
+/* ===== Render ===== */
 const app = document.getElementById('app');
 const progressEl = document.getElementById('progress');
 const dotsEl = document.getElementById('dots');
@@ -499,7 +527,7 @@ function setActive(n,dir=0){
 function next(){ if(i<total-1) setActive(i+1, +1); }
 function prev(){ if(i>0) setActive(i-1, -1); }
 
-/* ========= Home & controls ========= */
+/* ===== Home & controls ===== */
 const begin=document.getElementById('begin'), home=document.getElementById('home'), appRoot=document.getElementById('app');
 const bgm=document.getElementById('bgm'), audioToggle=document.getElementById('audioToggle');
 const hidePanelBtn=document.getElementById('hidePanel');
@@ -529,18 +557,17 @@ hidePanelBtn.addEventListener('click', ()=>{
   hidePanelBtn.textContent = panelHidden ? '⤡ Show Text' : '⤢ Hide Text';
 });
 
-/* ========= Sources panel ========= */
+/* ===== Sources panel ===== */
 const sourcesBtn=document.getElementById('sourcesBtn'), sourcesPane=document.getElementById('sourcesPane'), closeSources=document.getElementById('closeSources');
 let sourcesOpen=false;
 sourcesBtn.onclick=()=>{ sourcesPane.style.display='block'; sourcesOpen=true; };
 closeSources.onclick=()=>{ sourcesPane.style.display='none'; sourcesOpen=false; };
 
-/* ========= Preload images (faster, no black frames) ========= */
+/* ===== Preload (fast, no black frames) ===== */
 slides.filter(s=>s.img).forEach(s=>{
   const im=new Image(); im.src=s.img;
   if(im.decode){ im.decode().catch(()=>{}); }
 });
-/* Initialize dots on load */
 renderDots();
 </script>
 </body>
