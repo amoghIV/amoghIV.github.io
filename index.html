@@ -114,7 +114,7 @@
 
 <!-- APP -->
 <main id="app" aria-live="polite">
-  <div class="progress" id="progress">1 / 17</div>
+  <div class="progress" id="progress">1 / 15</div>
   <button id="prev" class="navbtn" aria-label="Previous">⟵</button>
   <button id="next" class="navbtn" aria-label="Next">⟶</button>
   <div class="dots" id="dots"></div>
@@ -122,7 +122,7 @@
 
 <!-- Controls -->
 <div class="controlbar">
-  <button class="chip" id="audioToggle" aria-label="Pause or play background music">⏸︎ Music</button>
+  <button class="chip" id="audioToggle" aria-label="Pause or play background music">▶︎ Music</button>
   <button class="chip" id="hidePanel" aria-label="Hide/show text panel">⤢ Hide Text</button>
 </div>
 <button class="sources" id="sourcesBtn" aria-label="Open sources used">Sources Used</button>
@@ -357,7 +357,7 @@ const slides = [
     deck:"Breeze, rain, and light set up rituals",
     bullets:[
       "The beam draws a clean line at noon right by the doorway.",
-      "The lighter colors get more vibrant as the day moves
+      "The lighter colors get more vibrant as the day moves",
       "The darker colors get darker correspondingly",
       "The huge open height makes sound feel soft and slow",
       "The path of the light is neat and repeatable through the year",
@@ -435,43 +435,7 @@ const slides = [
     deep:`<p>The change to a church didn’t fight the design; it slid right in. Processions replace sacrifices, prayers swap with offerings, but the room does the same job—hold people, focus them, and make the moment feel bigger.</p>`
   },
 
-  /* 15 — Raphael / Modern Memory */
-  {
-    title:"Raphael & the Modern Kings — Memory in Stone",
-    img:IMG("The_tomb_of_Raphael_in_the_Pantheon_in_Rome,_Italy_(Ank_Kumar)_06.jpg"),
-    side:"right",
-    deck:"Artists and rulers chose this place for rest and honor.",
-    bullets:[
-      "Soft curves of the niche echo the big circle overhead.",
-      "Warm reds and golds make the tomb feel close and human.",
-      "Chiseled letters and worn steps give a textured, lived feel.",
-      "The small space tucks into the larger circle without friction.",
-      "Shapes and words balance so nothing shouts over the rest.",
-      "Marble, paint, and inscription carry the memory.",
-      "Fame and nationhood borrow the building’s authority."
-    ],
-    deep:`<p>Raphael wanted this spot and got it; later, modern kings joined him. The dome lends weight to the idea of memory—if the ceiling feels timeless, the people remembered here feel bigger than a single era.</p>`
-  },
-
-  /* 16 — Spolia / Influence */
-  {
-    title:"Spolia, Losses, and Wide Influence",
-    img:IMG("Pantheon interior (32547903128).jpg"),
-    side:"left",
-    deck:"Bronze was stripped; the idea spread worldwide.",
-    bullets:[
-      "You can still trace where metal lines once ran along the porch.",
-      "Cool grays and darker patches show where pieces were taken.",
-      "Old bite marks in stone tell a rough, practical story.",
-      "The interior volume still feels whole even with losses.",
-      "Basic shapes—triangle, circle, grid—travel easily to new sites.",
-      "Stone gone; form intact—that’s the lasting power.",
-      "From Florence to D.C., the template keeps getting reused."
-    ],
-    deep:`<p>Later rulers pulled bronze from the portico, and people still quote the joke about the Barberini. Even so, the core design kept inspiring other domes and porticoes. Once a shape works this well, it’s hard to unsee it.</p>`
-  },
-
-  /* 17 — Final Overview */
+  /* 15 — Final Overview (was slide 17) */
   {
     title:"Final Overview — A Living Cosmos in Stone",
     img:IMG("Pantheon Piazza Della Rotonda (257357271).jpeg"),
@@ -558,7 +522,9 @@ let panelHidden=false;
 begin.addEventListener('click', async ()=>{
   home.style.display='none'; appRoot.style.display='block';
   setActive(0, +1);
-  try{ await bgm.play(); audioToggle.textContent='⏸︎ Music'; }catch(e){ audioToggle.textContent='▶︎ Music'; }
+  // music OFF by default; user must enable it manually
+  bgm.pause();
+  audioToggle.textContent='▶︎ Music';
 });
 
 document.getElementById('next').onclick=next; document.getElementById('prev').onclick=prev;
