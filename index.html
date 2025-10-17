@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>Pantheon • Tour</title>
 
-<!-- Performance & fonts -->
 <link rel="preconnect" href="https://upload.wikimedia.org" crossorigin>
 <link rel="preconnect" href="https://commons.wikimedia.org" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Great+Vibes&display=swap" rel="stylesheet">
@@ -23,7 +22,6 @@
   html,body{height:100%}
   body{margin:0;background:var(--bg);color:var(--fg);font-family:"Cinzel",serif;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;overflow:hidden}
 
-  /* Home */
   #home{position:fixed;inset:0;display:grid;place-items:center;background:#000 url("https://commons.wikimedia.org/wiki/Special:FilePath/Pantheon%20Blue%20Hour%20(52071461893).jpg?width=2560") center/cover no-repeat}
   .home-overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.3),rgba(0,0,0,.7))}
   .home-card{position:relative;z-index:2;max-width:var(--maxw);background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);padding:26px 26px 22px;text-align:center}
@@ -33,7 +31,6 @@
   .home-btn:hover{transform:translateY(-2px);filter:saturate(1.06)}
   .hint{margin-top:10px;font-size:14px;color:var(--muted);opacity:.9}
 
-  /* App shell */
   #app{position:fixed;inset:0;display:none;background:#000}
   .progress{position:fixed;top:10px;left:50%;transform:translateX(-50%);z-index:10;background:rgba(0,0,0,.45);border:1px solid var(--border);padding:6px 12px;border-radius:999px;font-size:14px}
   .navbtn{position:fixed;top:50%;transform:translateY(-50%);z-index:8;width:46px;height:46px;border-radius:50%;border:1px solid rgba(255,255,255,.16);display:grid;place-items:center;background:rgba(0,0,0,.36);color:#fff;cursor:pointer;transition:transform .15s ease, background .2s ease;user-select:none}
@@ -41,11 +38,10 @@
   #prev{left:14px} #next{right:14px}
   @media (max-width:780px){.navbtn{display:none}}
 
-  /* Slides */
   .slide{position:absolute;inset:0;background:#000 center/cover no-repeat;opacity:0;pointer-events:none;transition:opacity .45s ease}
   .slide.active{opacity:1;pointer-events:auto}
   .slideBG{position:absolute;inset:0;background-size:cover;background-position:center;transform-origin:60% 60%}
-  /* Ken Burns */
+
   .slide.active .slideBG{animation:ken 18s ease-in-out forwards}
   @keyframes ken{0%{transform:scale(1) translate3d(0,0,0)} 100%{transform:scale(1.06) translate3d(0,-1.2%,0)}}
 
@@ -62,17 +58,14 @@
   .deep{padding:0 14px 12px}
   .deep p{margin:10px 0 6px;line-height:1.75;font-size:clamp(15px,1.35vw,18px);color:#efe6d9}
 
-  /* Video bg (YouTube embed) */
   .yt-wrap{position:absolute;inset:0;overflow:hidden}
   .yt-wrap iframe{position:absolute;top:50%;left:50%;width:120vw;height:120vh;transform:translate(-50%,-50%)}
   .yt-scrim{position:absolute;inset:0;background:radial-gradient(1200px 680px at 70% 60%,rgba(0,0,0,.08),rgba(0,0,0,.62) 60%, rgba(0,0,0,.9))}
 
-  /* Controls */
   .controlbar{position:fixed;left:12px;bottom:12px;z-index:12;display:flex;gap:8px;flex-wrap:wrap}
   .chip{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);color:#fff;padding:8px 12px;border-radius:10px;cursor:pointer}
   .sources{position:fixed;right:12px;bottom:12px;z-index:12;border:none;background:transparent;cursor:pointer;font-family:"Great Vibes",cursive;font-size:28px;color:#ffb3b3;text-shadow:0 2px 8px rgba(0,0,0,.7)}
 
-  /* Sources overlay */
   #sourcesPane{position:fixed;inset:0;display:none;z-index:30;background:rgba(0,0,0,.88)}
   .sources-wrap{max-width:min(1040px,92vw);margin:6vh auto;background:rgba(18,19,25,.96);border:1px solid var(--border);border-radius:18px;padding:22px 22px 10px;box-shadow:var(--shadow);height:88vh;overflow:auto}
   .sources-wrap h2{text-align:center;margin:4px 0 14px;color:#ffbebe}
@@ -81,13 +74,11 @@
   .closeX{position:sticky;top:6px;float:right;margin-right:-8px;font-size:22px;background:none;color:#ffbebe;border:none;cursor:pointer}
   .sources-wrap a{color:#9ec5ff;text-decoration:none} .sources-wrap a:hover{text-decoration:underline}
 
-  /* Directional hint */
   .slide.enter-right{animation:enterRight .45s both ease-out}
   .slide.enter-left{animation:enterLeft .45s both ease-out}
   @keyframes enterRight{from{opacity:0;transform:translateX(18px)}to{opacity:1;transform:translateX(0)}}
   @keyframes enterLeft{from{opacity:0;transform:translateX(-18px)}to{opacity:1;transform:translateX(0)}}
 
-  /* Progress dots */
   .dots{position:fixed;left:50%;bottom:12px;transform:translateX(-50%);display:flex;gap:6px;z-index:11}
   .dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.32);border:1px solid rgba(255,255,255,.18)}
   .dot.active{background:#fff}
@@ -178,16 +169,10 @@
 </aside>
 
 <script>
-/* ===== Utilities ===== */
 const IMG = f => `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(f)}?width=2560`;
 const el = (tag, cls, html) => { const n=document.createElement(tag); if(cls) n.className=cls; if(html!==undefined) n.innerHTML=html; return n; };
 
-/* 
-Bullets are aligned to your slideshow prompts (line, color, texture, space, composition, medium/technique, POV/meaning/legacy), but phrased naturally without labels.
-Read-more sections are casual, human, and flowy for anyone who wants the deeper dive.
-*/
 const slides = [
-  /* 1 — PROLOGUE: construction-style animation (YouTube, muted) */
   {
     type:"youtube",
     youtubeId:"eBktmvegPjU",
@@ -206,7 +191,6 @@ const slides = [
     deep:`<p>The name basically means “all the gods,” but the building does more than house statues. The front keeps Agrippa’s credit, tying back to Augustus, while the rotunda is Hadrian’s era—big team effort. Greek look, Roman architecture: the outside is columns and sharp angles; the inside is all concrete geometry, built to catch light and feel bigger than you expect.</p>`
   },
 
-  /* 2 — Approach / Piazza */
   {
     title:"Piazza della Rotonda",
     img:IMG("Pantheon Blue Hour (52071461893).jpg"),
@@ -224,7 +208,6 @@ const slides = [
     deep:`<p>The piazza works like a stage. You gather, you face the porch, and the city quiets behind. The obelisk is a monument representing rome, the place is telling you about reach and demonstrates architectural excellence and prowess.</p>`
   },
 
-  /* 3 — Inscription / Portico */
   {
     title:"Front Inscription",
     img:IMG("Pantheon Rome1.jpg"),
@@ -242,7 +225,6 @@ const slides = [
     deep:`<p>The line—M·AGRIPPA…FECIT—does heavy lifting. It keeps the memory of the first build while the rest is a Hadrian era makeover. Those huge monoliths came by Nile and sea; just standing here, the materials tell you this was an emperial project.</p>`
   },
 
-  /* 4 — Bronze Doors / Threshold */
   {
     title:"Bronze Doors into the Pantheon",
     img:IMG("Pantheon (Rome) entrance door.jpg"),
@@ -260,7 +242,6 @@ const slides = [
     deep:`<p>Open the doors and everything shifts the mood, echo, the level of light. The metal is old but still moves cleanly, and the joints and panels quietly prepare your eye for the grid you’re about to see overhead.</p>`
   },
 
-  /* 5 — Interior Geometry */
   {
     title:"Interior Geometry — The 43.3 m Sphere",
     img:IMG("Rome-Pantheon.jpg"),
@@ -278,7 +259,6 @@ const slides = [
     deep:`<p>That sphere idea is the trick: diameter of the floor equals the height to the oculus. The wall gets sorted into seven bays so your eye never gets lost, and the marbles add warmth so the room doesn’t feel cold. It’s huge, but it stays readable.</p>`
   },
 
-  /* 6 — Oculus / Sunbeam */
   {
     title:"Oculus & Sunbeam",
     img:IMG("Pantheon, Rome with oculus lighting (8404115660).jpg"),
@@ -296,7 +276,6 @@ const slides = [
     deep:`<p>The oculus is basically the only real window, so the sun turns into a spotlight. As it moves, you watch the space tell time. Engineers helped that happen by thinning the shell and carving the coffers—lighter at the top, stronger below.</p>`
   },
 
-  /* 7 — Floor / Hydraulics */
   {
     title:"Floor & Drains",
     img:IMG("Pantheon floor drainage.jpg"),
@@ -313,7 +292,6 @@ const slides = [
     deep:`<p>If you’re here when it rains, it’s cool to see—drops come straight down, spread, and then vanish. The floor is slightly domed, and the drains are tucked into the pattern, so the whole thing stays clean and safe without anyone fussing over it.</p>`
   },
 
-  /* 8 — Concrete / Structure */
   {
     title:"Thinning of Concrete",
     img:IMG("Pantheon (Rome) - Dome interior.jpg"),
@@ -331,7 +309,6 @@ const slides = [
     deep:`<p>Romans tuned their mix to what the building needed—heavier down low, lighter up high. Add a strong curve and a regular coffer pattern to help support the structure. It’s advanced engineering and architecture.</p>`
   },
 
-  /* 9 — Exterior Dome / Mass */
   {
     title:"Exterior Dome",
     img:IMG("Pantheon dome.jpg"),
@@ -349,7 +326,6 @@ const slides = [
     deep:`<p>From the street it’s almost shy—no flashy tricks. Then you go in and it’s the expansive. That contrast is part of the plan. The structure’s thickness changes as it climbs, so the shape does the heavy lifting without metal reinforcement.</p>`
   },
 
-  /* 10 — Air / Ritual */
   {
     title:"Air, Weather, and Ritual Time",
     img:IMG("Pantheon Oculus Sun.JPG"),
@@ -367,7 +343,6 @@ const slides = [
     deep:`<p>Every visit feels a little different because the sky is part of the design. Some days you get a warm wash across the marbles; other days it’s a sharp, bright circle. On feast days they drop petals through the opening and the whole room reacts.</p>`
   },
 
-  /* 11 — Who designed it / Teamwork */
   {
     title:"Imperial Teamwork",
     img:IMG("Dehio 1 Pantheon Floor plan.jpg"),
@@ -384,7 +359,6 @@ const slides = [
     deep:`<p>No single name really sticks, and that makes sense. This feels like a crew job: planners, engineers, quarry bosses, and guilds all pulling together. The plan is simple enough to follow and smart enough to handle crowds without confusion.</p>`
   },
 
-  /* 12 — Setting / Campus Martius */
   {
     title:"Campus Martius — City and Sun",
     img:IMG("Plan Rome- Pantheon.png"),
@@ -401,7 +375,6 @@ const slides = [
     deep:`<p>It’s not just a building dropped anywhere. The neighbors: Ara Pacis, Augustan tomb, old solar obelisk are part of the area. Put all those together and the design and location are fully intentional and planned for.</p>`
   },
 
-  /* 13 — Materials / Logistics */
   {
     title:"Quarries, Ships, Labor",
     img:IMG("Pantheon, Roma, LZ, IT.jpg"),
@@ -418,7 +391,6 @@ const slides = [
     deep:`<p>Think about the travel: quarry to river to sea to river again. Then all that weight gets set with timber frames and a lot of skilled muscle. When it’s done, the parts look effortless, but the logistics are half the story.</p>`
   },
 
-  /* 14 — Conversion / Church */
   {
     title:"609 CE — Temple to Church",
     img:IMG("High altar Pantheon Rome.jpg"),
@@ -435,26 +407,24 @@ const slides = [
     deep:`<p>The change to a church didn’t fight the design; it slid right in. Processions replace sacrifices, prayers swap with offerings, but the room does the same job—hold people, focus them, and make the moment feel bigger.</p>`
   },
 
-  /* 15 — Final Overview (was slide 17) */
   {
-    title:"Final Overview — A Living Cosmos in Stone",
+    title:"Final Overview",
     img:IMG("Pantheon Piazza Della Rotonda (257357271).jpeg"),
     side:"right",
-    deck:"Greek face, Roman mind. A measured sky you can enter.",
+    deck:"Greek face with Roman Architecture - The Pantheon!",
     bullets:[
-      "Calm lines outside; a rush of lines to the oculus inside.",
-      "Warm and cool tones trade places as the sun moves.",
-      "Smooth marbles, rough stone, and metal details keep it tactile.",
-      "Open bowl of space stays clear and easy to read.",
-      "Everything orbits the center—clean and balanced.",
-      "Concrete, brick, marble, bronze—smart mix, smart craft.",
-      "Meaning keeps updating: gods, church, nation, and still counting."
+      "A feat of architecture powered by Roman Minds in the Hadrian Era",
+      "Large oculus in the top of the dome to allow light to enter",
+      "Varying effects created by the movement of light throughout the Pantheon",
+      "Large open sphere allows dissipation of noise and space for rituals",
+      "Many usages, from a temple to a church to celebrations",
+      "Multitude of materials for structure, looks and showing of wealth",
+      "Over 95% intact and preserved from it's original creation in the Hadrian era"
     ],
     deep:`<p>It’s a simple idea done perfectly: temple mask out front, universe inside. Light slides around, rain comes in and leaves, sound softens, and people keep finding new reasons to gather here. The building doesn’t need to shout. It just works, day after day.</p>`
   }
 ];
 
-/* ===== Render ===== */
 const app = document.getElementById('app');
 const progressEl = document.getElementById('progress');
 const dotsEl = document.getElementById('dots');
@@ -513,7 +483,6 @@ function setActive(n,dir=0){
 function next(){ if(i<total-1) setActive(i+1, +1); }
 function prev(){ if(i>0) setActive(i-1, -1); }
 
-/* ===== Home & controls ===== */
 const begin=document.getElementById('begin'), home=document.getElementById('home'), appRoot=document.getElementById('app');
 const bgm=document.getElementById('bgm'), audioToggle=document.getElementById('audioToggle');
 const hidePanelBtn=document.getElementById('hidePanel');
@@ -545,13 +514,11 @@ hidePanelBtn.addEventListener('click', ()=>{
   hidePanelBtn.textContent = panelHidden ? '⤡ Show Text' : '⤢ Hide Text';
 });
 
-/* ===== Sources panel ===== */
 const sourcesBtn=document.getElementById('sourcesBtn'), sourcesPane=document.getElementById('sourcesPane'), closeSources=document.getElementById('closeSources');
 let sourcesOpen=false;
 sourcesBtn.onclick=()=>{ sourcesPane.style.display='block'; sourcesOpen=true; };
 closeSources.onclick=()=>{ sourcesPane.style.display='none'; sourcesOpen=false; };
 
-/* ===== Preload (fast, no black frames) ===== */
 slides.filter(s=>s.img).forEach(s=>{
   const im=new Image(); im.src=s.img;
   if(im.decode){ im.decode().catch(()=>{}); }
